@@ -1,17 +1,56 @@
+//(function() {
+  //  'use strict';
+
+
 var universe = new Phaser.Game(window.innerWidth*window.devicePixelRatio, window.innerHeight*window.devicePixelRatio, Phaser.CANVAS);
 
-var game = function(){
-    console.log("running!!!");
+var gameState1 = function(){
+    console.log("gameState1");
 }
 
-game.prototype = {
+gameState1.prototype = {
     preload:preload,
     create:create,
     update:update
 };
 
-universe.state.add('game',game);
-universe.state.start('game');
+var gameState2 = function(){
+    console.log("gameState2");
+}
+
+gameState2.prototype = {
+        preload : preload2,
+        create : create2,
+        update : update2
+};
+
+function preload(){
+         universe.load.image('button','img/button-start-game.png');
+}
+var button;
+function create(){
+    button = universe.add.button(universe.world.centerX ,universe.world.centerY, 'button', actionOnClick,'Start'); 
+        button.anchor.setTo(0.2,0.2);
+
+     function actionOnClick () {
+
+        universe.state.start('gameState2');
+
+}
+
+}
+
+function update(){
+
+}
+
+
+
+
+
+universe.state.add('gameState1',gameState1);
+universe.state.add('gameState2', gameState2);
+universe.state.start('gameState1');
 
 var pl = [];
 var st = [];
@@ -20,7 +59,7 @@ var rocket, life=100;
 var fuel,bmd,background, k = 0;
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
-function preload(){
+function preload2(){
      universe.load.image('pn1','img/planet1.png');
      // universe.load.image('pn2','img/planet2.png');
      // universe.load.image('pn3','img/planet3.png');
@@ -46,7 +85,7 @@ function preload(){
 
 
 //-------------------------------------------------------------------------------------------------------------------------------
-function create(){
+function create2(){
      background = universe.add.tileSprite(0, 0, 1365, 625, 'bg');
      
      universe.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
@@ -134,7 +173,7 @@ function create(){
 
 
 //--------------------------------------------------------------------------------------------------------------------
-function update(){
+function update2(){
 
     var i,j,q=0;
 
@@ -253,3 +292,5 @@ function collect(rocket,st){
 
     st.visible = false;
 }
+
+//})();
