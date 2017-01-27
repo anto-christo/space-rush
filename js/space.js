@@ -36,11 +36,10 @@ gameOver.prototype = {
 
 
 
- // var fullButton;
- // var fullButton_scale = 0.3;
+ var fullButton;
+ var fullButton_scale = 0.3;
  var button;
  var video;
-
   
 universe.state.add('gameState1',gameState1);
 universe.state.add('gameState2', gameState2);
@@ -49,26 +48,21 @@ universe.state.start('gameState1');
 
  function preload(){
          universe.load.image('button','img/button-start-game.png')
-//          universe.load.spritesheet('fullButton','img/fullButton.png', 125, 100);
+         universe.load.spritesheet('fullButton','img/fullButton.png', 125, 100);
         universe.load.video('video', 'img/video.mp4');
 
 
 }
  function create(){
-            // universe.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-            //         universe.input.onDown.add(gofull, this);
-
-              //  universe.physics.startSystem(Phaser.Physics.ARCADE);
+           
+               universe.physics.startSystem(Phaser.Physics.ARCADE);
 video = universe.add.video('video');
 
     video.play(true);
 
     //  x, y, anchor x, anchor y, scale x, scale y
-    video.addToWorld();
+    video.addToWorld(0,0,0,0,4,3);
    
-// full screen
-     universe.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-         universe.input.onDown.add(gofull, this);
 
 
 
@@ -77,18 +71,17 @@ video = universe.add.video('video');
     button = universe.add.button(universe.world.centerX , 20, 'button', actionOnClick,'Start'); 
         button.anchor.setTo(0.2,0.2);
 
-    //     universe.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    // universe.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-
-    // this.universe.scale.pageAlignHorizontally = true;
-    //    this.universe.scale.pageAlignVertically = true;
-    //    this.universe.scale.refresh();
-
-    //    fullButton = universe.add.button(90, 90, 'fullButton', goFull, this, 2, 1, 0);
-    //     fullButton.input.priorityID = 0;
-    //     fullButton.scale.setTo(fullButton_scale, fullButton_scale);
-
+   
+   
        
+//fullscreen
+universe.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    universe.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+       fullButton = universe.add.button(90, 90, 'fullButton', goFull, this, 2, 1, 0);
+        fullButton.input.priorityID = 0;
+        fullButton.scale.setTo(fullButton_scale, fullButton_scale);
+
 
      function actionOnClick () {
 
@@ -112,7 +105,7 @@ var fuel,bmd,background, k = 0;
 var star;
 var scoreText;
 var score = 0;
-var score_dynamic;
+var score_dynamic=0;
 //-------------------------------------------------------------------------------------------------------------------------------------------
  function preload2(){
      universe.load.image('pn1','img/planet1.png');
@@ -136,18 +129,12 @@ var score_dynamic;
      universe.load.image('star','img/fuel.png');
      universe.load.image('bg','img/space_bg.jpg');
      universe.load.image('ship','img/ship.png');
+     universe.load.spritesheet('fullButton','img/fullButton.png', 125, 100);
 }
 
 
 //-------------------------------------------------------------------------------------------------------------------------------
  function create2(){
-     //full screen
-        universe.scale.startFullScreen();
-//showing score
-       // scoreText = universe.add.text(60, 60, 'SCORE: ' + score, { fontSize: '32px', fill: '#FFFF00' });
-
-
-
      background = universe.add.tileSprite(0, 0, 1365, 625, 'bg');
      
      universe.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
@@ -231,6 +218,17 @@ var score_dynamic;
 
      universe.time.events.loop(Phaser.Timer.SECOND/60, fuel, this);
 
+//showing score
+       scoreText = universe.add.text(60, 60, 'SCORE: ' + score, { fontSize: '32px', fill: '#FFFF00' });
+
+
+ //fullscreen
+
+       fullButton = universe.add.button(90, 150, 'fullButton', goFull, this, 2, 1, 0);
+        fullButton.input.priorityID = 0;
+        fullButton.scale.setTo(fullButton_scale, fullButton_scale);
+
+
 }
 
 
@@ -243,17 +241,17 @@ function update2(){
 
         // universe.physics.arcade.overlap(rocket,planets, collisionHandler, null, this);
 
-        // if (cursors.up.isDown || cursors.left.isDown || cursors.right.isDown || cursors.down.isDown){
-        //     score_dynamic += 1;
+        if (cursors.up.isDown || cursors.left.isDown || cursors.right.isDown || cursors.down.isDown){
+            score_dynamic += 1;
 
-        //     console.log(score_dynamic);
+            console.log(score_dynamic);
             
-        //     if(score_dynamic%10 == 0)
-        //     {
-        //         score += 1;
-        //         scoreText.text = 'SCORE: ' + score;
-        //     }
-        // }
+            if(score_dynamic%100 == 0)
+            {
+                score += 1;
+                scoreText.text = 'SCORE: ' + score;
+            }
+        }
 
     //     var checkPos = function checkPos(planets) {
 
@@ -375,7 +373,7 @@ function preload3(){
 }
 var scoreText
 function create3(){
-    scoreText = universe.add.text(universe.world.width/2, universe.world.height/2, 'Game Over! ', { fontSize: '32px', fill: '#FFF'});
+    scoreText = universe.add.text(universe.world.width/2, universe.world.height/2, 'Game Over! \n\nFinal Score: '+score , { fontSize: '32px', fill: '#FFF'});
     scoreText.anchor.setTo(0.5,0.5);
 }
 
@@ -400,16 +398,12 @@ function collect(rocket,st){
 
     st.visible = false;
 }
-function gofull() {
-
-    if (universe.scale.isFullScreen)
-    {
+function goFull() {
+    if (universe.scale.isFullScreen){
         universe.scale.stopFullScreen();
     }
-    else
-    {
+    else{
         universe.scale.startFullScreen(false);
     }
-
 }
  // })();
