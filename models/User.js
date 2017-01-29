@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 
 var userSchema = new mongoose.Schema({
-    	score:{
+    	score: {
         type: Number
     }
 });
 
-var User = mongoose.model('space_db', userSchema);
+var User = mongoose.model('scores', userSchema);
 module.exports = User;

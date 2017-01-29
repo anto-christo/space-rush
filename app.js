@@ -28,8 +28,7 @@ app.set('view engine', 'html'); // set html as default view/render engine
 
 // database connection
 // connection to mongodb should be created only once in the entire application. if database switch is necessary then previous connection needs to be close before initializing new connection
-mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://127.0.0.1:27017/space_db'); // syntax: mongoose.connect('mongodb:hostaddress:configured_port/database_name');
+mongoose.connect('mongodb://127.0.0.1:27017/space-rush'); // syntax: mongoose.connect('mongodb:hostaddress:configured_port/database_name');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

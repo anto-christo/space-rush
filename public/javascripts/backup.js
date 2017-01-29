@@ -1,147 +1,81 @@
-var universe = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS);
+var universe = new Phaser.Game(window.innerWidth*window.devicePixelRatio, window.innerHeight*window.devicePixelRatio, Phaser.CANVAS);
 
-var gameState1 = function(){
-    console.log("gameState1");
+var game1 = function(){
+
 }
 
-gameState1.prototype = {
+game1.prototype = {
     preload:preload,
     create:create,
-    update:update,
+    update:update
 };
 
-var gameState2 = function(){
-    console.log("gameState2");
+var game2 = function(){
+
 }
 
-gameState2.prototype = {
-        preload : preload2,
-        create : create2,
-        update : update2
+game2.prototype = {
+    preload:preload2,
+    create:create2,
+    update:update2
 };
 
-var gameOver = function(){
-    console.log("gameOver");
-}
-
-gameOver.prototype = {
-    preload:preload3,
-    create:create3,
-    update:update3,
-};
-
-
-
- var fullButton;
- var fullButton_scale = 0.3;
- var button;
- var video;
-  
-universe.state.add('gameState1',gameState1);
-universe.state.add('gameState2', gameState2);
-universe.state.add('gameOver',gameOver);
-universe.state.start('gameState1');
-
- function preload(){
-         universe.load.image('button','images/button-start-game.png')
-         universe.load.spritesheet('fullButton','images/fullButton.png', 125, 100);
-        universe.load.video('video', 'images/video.mp4');
-
-
-}
- function create(){
-           
-               universe.physics.startSystem(Phaser.Physics.ARCADE);
-video = universe.add.video('video');
-
-    video.play(true);
-
-    //  x, y, anchor x, anchor y, scale x, scale y
-    video.addToWorld(0,0,0,0,4,3);
-	
-    button = universe.add.button(universe.world.centerX , 20, 'button', actionOnClick,'Start'); 
-        button.anchor.setTo(0.2,0.2);
-       
-//fullscreen
-universe.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    universe.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-
-       fullButton = universe.add.button(90, 90, 'fullButton', goFull, this, 2, 1, 0);
-        fullButton.input.priorityID = 0;
-        fullButton.scale.setTo(fullButton_scale, fullButton_scale);
-
-
-     function actionOnClick () {
-
-        universe.state.start('gameState2');
-                universe.scale.startFullScreen(true);
-
-}
-
-}
-
- function update(){
-
-}
-
+universe.state.add('game1',game1);
+universe.state.add('game2',game2);
+universe.state.start('game1');
 
 var pl = [];
 var st = [];
 var randX, randY, l=150, h=60;
 var rocket, life=100;
 var fuel,bmd,background, k = 0;
-var star;
-var scoreText;
-var score = 0;
-var score_dynamic=0;
+var score, expl;
+
 //-------------------------------------------------------------------------------------------------------------------------------------------
- function preload2(){
+function preload(){
      universe.load.image('pn1','images/planet1a.png');
-     // universe.load.image('pn2','images/planet2.png');
-     // universe.load.image('pn3','images/planet3.png');
+     // universe.load.image('pn2','../public/images/planet2.png');
+     // universe.load.image('pn3','../public/images/planet3.png');
      universe.load.image('pn4','images/planet4.png');
-     // universe.load.image('pn5','images/planet5.png');
-     universe.load.image('pn6','images/planet6.png');
-     // universe.load.image('pn7','images/planet7.png');
-     // universe.load.image('pn8','images/planet10.png');
-     universe.load.image('pn9','images/planet11.png');
-     // universe.load.image('pn10','images/planet12.png');
-     // universe.load.image('pn11','images/planet13.png');
-     // universe.load.image('pn12','images/planet14.png');
-     // universe.load.image('pn13','images/planet15.png');
-     universe.load.image('pn14','images/planet16.png');
-     // universe.load.image('pn15','images/planet17.png');
-     // universe.load.image('pn16','images/planet18.png');
-     universe.load.image('pn17','images/planet19.png');
+     // universe.load.image('pn5','../public/images/planet5.png');
+      universe.load.image('pn6','images/planet6.png');
+     // universe.load.image('pn7','../public/images/planet7.png');
+     // universe.load.image('pn8','../public/images/planet10.png');
+      universe.load.image('pn9','images/planet11.png');
+     // universe.load.image('pn10','../public/images/planet12.png');
+      universe.load.image('pn11','images/planet13.png');
+    //universe.load.image('pn12','../public/images/planet14.png');
+     // universe.load.image('pn13','../public/images/planet15.png');
+      universe.load.image('pn14','images/planet16.png');
+     // universe.load.image('pn15','../public/images/planet17.png');
+     // universe.load.image('pn16','../public/images/planet18.png');
+    universe.load.image('pn17','images/planet19.png');
      universe.load.image('pn18','images/planet20.png');
      universe.load.image('star','images/fuel.png');
      universe.load.image('bg','images/space_bg.jpg');
      universe.load.image('ship','images/ship.png');
-	 universe.load.image('pause','images/pause.png');
-	 universe.load.image('play','images/play.png');
-	 universe.load.image('blast','images/blast.png');
-     universe.load.spritesheet('fullButton','images/fullButton.png', 125, 100);
+     universe.load.image('blast','images/blast.png');
 }
 
 
 //-------------------------------------------------------------------------------------------------------------------------------
- function create2(){
-    background = universe.add.tileSprite(0, 0, 1365, 625, 'bg');
+function create(){
+     background = universe.add.tileSprite(0, 0, 1365, 625, 'bg');
      
-    universe.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
-    universe.scale.setResizeCallback(this.gameResized, this);
+     universe.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+     universe.scale.setResizeCallback(this.gameResized, this);
 
-    universe.physics.startSystem(Phaser.Physics.ARCADE);
+     universe.physics.startSystem(Phaser.Physics.ARCADE);
      
-	expl = universe.add.sprite(0,0,'blast');
-    expl.visible=false;
-    rocket = universe.add.sprite(100, 100, 'ship');
-    rocket.scale.setTo(0.1,0.1);
-    universe.physics.arcade.enable(rocket);
-    rocket.body.collideWorldBounds = true;
-    rocket.body.drag.set(1000);
-    rocket.body.maxVelocity.set(300);
-    rocket.anchor.set(0.5);
+     expl = universe.add.sprite(0,0,'blast');
+     expl.visible=false;
+     rocket = universe.add.sprite(100, 100, 'ship');
+     rocket.scale.setTo(0.1,0.1);
+     universe.physics.arcade.enable(rocket);
+     rocket.body.collideWorldBounds = true;
+     rocket.body.drag.set(1000);
+     rocket.body.maxVelocity.set(300);
+     rocket.anchor.set(0.5);
      
 //-------------------------------------------------------------------------------------------------------------------
 
@@ -163,9 +97,10 @@ var score_dynamic=0;
 
      for(var i=0;i<400;i++){
 
-        //pl[i] = planets.create(1000 + Math.cos(0), 300 + Math.sin(0), 'pn1');
-		pl[i] = planets.create(1000 , 300 , 'pn1');
-		// else if(i%5==0)
+        
+        pl[i] = planets.create(1000 , 300 , 'pn1');
+
+        // else if(i%5==0)
         // pl[i] = planets.create(1000 , 300, 'pn4');
 
         // else if(i%7==0)
@@ -182,7 +117,8 @@ var score_dynamic=0;
 
         // else
         // pl[i] = planets.create(1000 + Math.cos(0), 300 + Math.sin(0), 'pn18');
-		
+
+
         if(i%4==0){
             l=150;
             h=60;
@@ -228,53 +164,13 @@ var score_dynamic=0;
 
      universe.time.events.loop(Phaser.Timer.SECOND/60, fuel, this);
 
-//showing score
-       scoreText = universe.add.text(60, 60, 'SCORE: ' + score, { fontSize: '32px', fill: '#FFFF00' });
-
-
- //fullscreen
-
-        fullButton = universe.add.button(90, 150, 'fullButton', goFull, this, 2, 1, 0);
-        fullButton.input.priorityID = 0;
-        fullButton.scale.setTo(fullButton_scale, fullButton_scale);
-		
-	//pause button
-
-		pauseButton= universe.add.button(85, 180, 'pause', pause_game, this, 2, 1, 0);
-		pauseButton.scale.setTo(0.1, 0.1);
-
-
 }
 
 
 //--------------------------------------------------------------------------------------------------------------------
-function update2(){
+function update(){
 
     var i,j,q=0;
-
-// planets.forEach(checkPos, this);
-
-        // universe.physics.arcade.overlap(rocket,planets, collisionHandler, null, this);
-
-        if (cursors.up.isDown || cursors.left.isDown || cursors.right.isDown || cursors.down.isDown){
-            score_dynamic += 1;
-
-            console.log(score_dynamic);
-            
-            if(score_dynamic%100 == 0)
-            {
-                score += 1;
-                scoreText.text = 'SCORE: ' + score;
-            }
-        }
-
-    //     var checkPos = function checkPos(planets) {
-
-    // };
-
-    // var collisionHandler = function collisionHandler(rocket, obstacle) {
-    //     universe.state.start('gameOver');
-    // };
 
     for(i=0;i<100;i++){
         for(j=q;j<q+4;j++){
@@ -374,12 +270,10 @@ function update2(){
     // {
     //     rocket.body.angularVelocity = 0;
     // }
-    if(  healthBar.width<0){
-    universe.state.start('gameOver');
-    }
-	
-	 universe.physics.arcade.collide(rocket, planets, impact, null, this);
+
+    universe.physics.arcade.collide(rocket, planets, impact, null, this);
 }
+//---------------------------------------------------------------------------------------------------------------------------
 
 function impact(){
   
@@ -389,20 +283,32 @@ function impact(){
     expl.visible = true;
 
     rocket.kill();
-    universe.state.start('gameOver');
+    universe.state.start('game2');
 }
 
-function preload3(){
+function fuel(){
+    healthBar.width-=5;
+}
+
+
+function collect(rocket,st){
+
+    if(healthBar.width<universe.world.width && st.taken==0){
+        st.taken++;
+        healthBar.width+=350;
+    }
+
+    st.visible = false;
+}
+
+function preload2(){
 
 }
 
-var scoreText;
-
-function create3(){
-    scoreText = universe.add.text(universe.world.width/2, universe.world.height/2, 'Game Over! \n\nFinal Score: '+score , { fontSize: '32px', fill: '#FFF'});
-    scoreText.anchor.setTo(0.5,0.5);
-
-    console.log("Game state 2 entered !!");
+function create2(){
+        
+        score = 5000;
+        console.log("Game state 2 entered !!");
         console.log(score);
         $.ajax({
         type: 'POST',
@@ -419,46 +325,9 @@ function create3(){
             }
         }
         });
-};
-
-function update3(){
-
-}
-//---------------------------------------------------------------------------------------------------------------------------
-
-function fuel(){
-    healthBar.width-=3;
 }
 
+function update2(){
 
-function collect(rocket,st){
-
-    if(healthBar.width<universe.world.width && st.taken==0){
-        st.taken++;
-        healthBar.width+=350;
-    }
-
-    st.visible = false;
-}
-function goFull() {
-    if (universe.scale.isFullScreen){
-        universe.scale.stopFullScreen();
-    }
-    else{
-        universe.scale.startFullScreen(false);
-    }
 }
 
-function pause_game() {
-	universe.paused= true;
-	universe.input.onDown.add(unpause, self);
-	playButton= universe.add.button(500, 180, 'play', unpause, this, 2, 1, 0);
-	playButton.scale.setTo(0.3, 0.3);
-}
-
-function unpause(event) {
-	playButton.kill();
-	universe.paused= false;
-}
-
-//--------------------ANTO'S AJAX CODE------------------------

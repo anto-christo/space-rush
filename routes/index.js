@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var _ = require('underscore');
 var User = require('../models/User');
 
+
 router.get('/', function(req, res, next){
 	res.render('index');
 })
@@ -20,7 +21,7 @@ router.post('/input_score', function(req, res, next){
 					return res.status(500).send(JSON.stringify({'msg':'servererror'}));
 				}
 				else{
-					console.log('score sent from index.js');
+					console.log('score sent from index');
 					res.send(JSON.stringify({'msg':'success'}));
 				}
 			});
