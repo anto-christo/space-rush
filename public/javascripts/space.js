@@ -31,6 +31,16 @@ gameOver.prototype = {
     update:update3,
 };
 
+var leaderboard = function(){
+
+}
+
+leaderboard.prototype = {
+    preload:lpreload,
+    create:lcreate,
+    update:lupdate,   
+};
+
 var howtoplay = function(){
     console.log("howtoplay");
 }
@@ -46,10 +56,12 @@ howtoplay.prototype = {
  var fullButton_scale = 0.3;
  var button;
  var video;
+ var w,s,a,d;
   
 universe.state.add('gameState1',gameState1);
 universe.state.add('gameState2', gameState2);
 universe.state.add('gameOver',gameOver);
+universe.state.add('leaderboard',leaderboard);
 universe.state.add('howtoplay',howtoplay);
 universe.state.start('gameState1');
 
@@ -65,20 +77,12 @@ function preload(){
 }
  function create(){
            
-              // universe.physics.startSystem(Phaser.Physics.ARCADE);
-    landing = universe.add.tileSprite(0, 0,1350,753, 'lp');
-    lp_width = window.innerWidth/1350;
-    lp_height = window.innerHeight/753;
+    
+     landing = universe.add.tileSprite(0, 0,1350,753, 'lp');
+     lp_width = window.innerWidth/1350;
+     lp_height = window.innerHeight/753;
 
-  landing.scale.setTo(lp_width,lp_height);
-// video = universe.add.video('video');
-
-//     video.play(true);
-
-    //  x, y, anchor x, anchor y, scale x, scale y
-    // video.addToWorld(0,0,0,0,4,3);
-   
-// rocket     
+     landing.scale.setTo(lp_width,lp_height);    
 
      rocket = universe.add.sprite(10, 10, 'ship');
      rocket.scale.setTo(0.1,0.1);
@@ -88,23 +92,21 @@ function preload(){
      rocket.body.maxVelocity.set(300);
      rocket.anchor.set(0.5);
      
-cursors = universe.input.keyboard.createCursorKeys();
-     spc = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
+     cursors = universe.input.keyboard.createCursorKeys();
+     //spc = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
+
+     w = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.W);
+     a = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.A);
+     s = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.S);
+     d = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.D);
 
    
    
        
 //fullscreen
-universe.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    universe.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     universe.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
- 
-
-//      function actionOnClick () {
-
-//         universe.state.start('gameState2');
-               
-// }
 
 }
 
@@ -176,9 +178,15 @@ if (universe.input.activePointer.isDown)
         {
             universe.state.start('gameState2'); //play button
         }
+
         else if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.65 &&y<window.innerHeight*0.724) 
         {
             universe.state.start('howtoplay');
+        }
+        
+        else if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.72 &&y<window.innerHeight*0.832) 
+        {
+            universe.state.start('leaderboard');
         }
     }
 
@@ -196,6 +204,8 @@ var scoreText;
 var score = 0;
 var score_dynamic=0;
 var scoreText;
+var hit,take,alert; 
+
 //-------------------------------------------------------------------------------------------------------------------------------------------
  function preload2(){
      universe.load.image('pn1','images/planet1a.png');
@@ -217,19 +227,23 @@ var scoreText;
      universe.load.image('pn17','images/planet19.png');
      //universe.load.image('pn18','images/planet20.png');
      universe.load.image('star','images/fuel.png');
-     universe.load.image('bg','images/space2.png');
+     universe.load.image('bg','images/space_bg.png');
      universe.load.image('ship','images/ship.png');
 	 universe.load.image('pause','images/pause.png');
 	 universe.load.image('play','images/play.png');
      universe.load.image('pausemenu','images/pausemenu.png');
      universe.load.spritesheet('blast', 'images/flame.png',64,64);
      universe.load.spritesheet('fullButton','images/fullButton.png', 125, 100);
+
+     universe.load.audio('hit','audio/hit.mp3');
+     universe.load.audio('take','audio/take.mp3');
+     universe.load.audio('alert','audio/alert.mp3');
 }
 
 
 //-------------------------------------------------------------------------------------------------------------------------------
  function create2(){
-    background = universe.add.tileSprite(0, 0, window.innerWidth, window.innerHeight, 'bg');
+    background = universe.add.tileSprite(0, 0, window.innerWidth*window.devicePixelRatio, window.innerHeight*window.devicePixelRatio, 'bg');
      
     universe.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     universe.scale.setResizeCallback(this.gameResized, this);
@@ -249,6 +263,10 @@ var scoreText;
     rocket.body.drag.set(1000);
     rocket.body.maxVelocity.set(300);
     rocket.anchor.set(0.5);
+
+    hit = universe.add.audio('hit');
+    take = universe.add.audio('take');
+    alert = universe.add.audio('alert');
      
 //-------------------------------------------------------------------------------------------------------------------
 
@@ -258,7 +276,6 @@ var scoreText;
 
      k= 0;
 
-
      for(var i=0;i<300;i++){
                 console.log("in create2");
             randX = 1200+Math.floor(Math.random()*100);
@@ -266,7 +283,7 @@ var scoreText;
             st[i] = star.create(randX + k, randY, 'star');
             st[i].scale.setTo(0.4, 0.4);
             st[i].taken=0;
-            k+=800;
+            k+=750;
      }
 
       planets = universe.add.group();
@@ -327,14 +344,9 @@ var scoreText;
      cursors = universe.input.keyboard.createCursorKeys();
 
      var bmd = universe.add.bitmapData(1400,40);
-       
-         bmd.ctx.beginPath();
-         bmd.ctx.rect(0,0,600,60);
-         bmd.ctx.fillStyle = 'white';
-         bmd.ctx.fill();
 
          bmd.ctx.beginPath();
-         bmd.ctx.rect(10,10,590,50);
+         bmd.ctx.rect(0,0,1300,50);
          bmd.ctx.fillStyle = 'red';
          bmd.ctx.fill();
 
@@ -461,20 +473,10 @@ function impact(){
     universe.camera.shake(0.03, 1000);
     universe.camera.shake(0.02, 1000);
 
+    hit.play();
+
     setTimeout(over,1000);
 }
-
-function over(){
-    universe.state.start('gameOver');
-}
-
-
-
-function point(){
-    score += 10;
-    scoreText.text = 'SCORE: ' + score;
-}
-
 
 
 function preload3(){
@@ -486,7 +488,7 @@ var scoreText;
 
 
 function create3(){
-    scoreText = universe.add.text(universe.world.width/2, universe.world.height/2, 'Game Over! \n\nFinal Score: '+score , { fontSize: '32px', fill: '#FFF'});
+    scoreText = universe.add.text(200, 200, 'Game Over! \n\nFinal Score: '+score , { fontSize: '32px', fill: '#FFF'});
     scoreText.anchor.setTo(0.5,0.5);
 
     console.log("Game state 2 entered !!");
@@ -506,14 +508,26 @@ function create3(){
             }
         }
         });
+
+
+        $.ajax({
+        type: 'GET',
+        url: '/ret_score',
+        dataType: 'json',
+        success: function(response){
+            
+            for(var j=0;j<10;j++)
+            {
+                var lead = universe.add.text(universe.world.width/2,100+j*30,response[j].score,{fontSize: '15px', fill:'white'});
+                lead.anchor.setTo(0.5,0.5);
+            }
+        }
+        });
 };
 
 function update3(){
 
 }
-
-
-
 
 var arrows;
 
@@ -521,7 +535,7 @@ var arrows;
 var oscIndex = 0;
 
 function preload4(){
-         universe.load.image('bg','images/space_bg.jpg');
+         universe.load.image('bg','images/space_bg.png');
          universe.load.image('arrow','images/arrows.png');
          universe.load.image('ship','images/ship.png');
   universe.load.image('star','images/fuel.png');
@@ -648,11 +662,42 @@ if(cursors.left.isDown){
 
     oscillation();
 }
-
 //---------------------------------------------------------------------------------------------------------------------------
+
+function lpreload(){
+
+}
+
+function lcreate(){
+
+    var board = universe.add.text(585,50,"LEADERBOARD",{fontSize: '30px', fill:'white'});
+
+    $.ajax({
+        type: 'GET',
+        url: '/ret_score',
+        dataType: 'json',
+        success: function(response){
+            
+            for(var j=0;j<10;j++)
+            {
+                var lead = universe.add.text(universe.world.width/2,150+j*30,response[j].score,{fontSize: '15px', fill:'white'});
+                lead.anchor.setTo(0.5,0.5);
+            }
+        }
+        });
+
+}
+
+function lupdate(){
+
+}
+
 
 function fuel(){
     healthBar.width-=4;
+
+    if(healthBar.width==0.25*1300)
+        alert.play();
 }
 
 
@@ -661,10 +706,13 @@ function collect(rocket,st){
     if(healthBar.width<universe.world.width && st.taken==0){
         st.taken++;
         healthBar.width+=350;
+        take.play();
     }
 
     st.visible = false;
 }
+
+
 function goFull() {
     if (universe.scale.isFullScreen){
         universe.scale.stopFullScreen();
@@ -743,6 +791,36 @@ function unpause(x, y) {
 }
 
 
+function over(){
+    universe.state.start('gameOver');
+}
+
+
+
+function point(){
+    score += 10;
+    scoreText.text = 'SCORE: ' + score;
+}
+
+var calcSin = function calcSin (amp, osc, sinD) {
+        return amp * Math.sin(osc / sinD);
+    };
+
+    //Oscillation function defined separately to oscillate the particle
+    var oscillation = function oscillation() {
+        var y = star.y;
+        startx = 900;
+        if (oscIndex === 10000000000) oscIndex = 1;
+        
+        var sin = calcSin(100, oscIndex, 20);
+        star.x = 900 + parseInt(sin);
+        planets.x = 900 + parseInt(sin);
+        y = y - 3;
+        oscIndex++;
+        // console.log(rocket.x);
+    };
+
+
 //-------------------BLOCK SCROLLING OF PAGE DUE TO SPACEBAR AND ARROW KEYS---------------------
 
 var keys = {};
@@ -761,20 +839,3 @@ window.addEventListener('keyup',
         keys[e.keyCode] = false;
     },
 false);
-var calcSin = function calcSin (amp, osc, sinD) {
-        return amp * Math.sin(osc / sinD);
-    };
-
-    //Oscillation function defined separately to oscillate the particle
-    var oscillation = function oscillation() {
-        var y = star.y;
-        startx = 900;
-        if (oscIndex === 10000000000) oscIndex = 1;
-        
-        var sin = calcSin(100, oscIndex, 20);
-        star.x = 900 + parseInt(sin);
-        y = y - 3;
-        oscIndex++;
-        // console.log(rocket.x);
-    };
-
