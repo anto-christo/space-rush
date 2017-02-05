@@ -550,7 +550,7 @@ function preload4(){
 function create4(){
      
      background = universe.add.tileSprite(0, 0,window.innerWidth, window.innerHeight, 'bg');
-           arrows = universe.add.image(50,120, 'arrow');
+           arrows = universe.add.image(60,100, 'arrow');
         arrows.scale.setTo(0.4,0.4);
 
     var style = { font: '18pt Hobo Std', fill: 'white', align: 'justified', wordWrap: true, wordWrapWidth: 1135 };
@@ -558,9 +558,10 @@ function create4(){
     var styleTitle = { font: '25pt Hobo Std', fill: 'white', align: 'justified', wordWrap: true, wordWrapWidth: 1135 };
     var styleline = {fill:'white'};
 
- 
- rocket = universe.add.sprite(880,120, 'ship');
-     rocket.scale.setTo(0.1,0.1);
+var bounds = new Phaser.Rectangle(800,50,390,180);
+
+ rocket = universe.add.sprite(bounds.centerX, bounds.centerY, 'ship');
+      rocket.scale.setTo(0.1,0.1);
      universe.physics.arcade.enable(rocket);
      rocket.body.collideWorldBounds = true;
      rocket.body.drag.set(1000);
@@ -570,6 +571,11 @@ function create4(){
 cursors = universe.input.keyboard.createCursorKeys();
      spc = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
      var graphics = universe.add.graphics(0, 0);
+
+        var graphics = universe.add.graphics(bounds.x, bounds.y);
+    graphics.lineStyle(4, 0xffd900, 1);
+    graphics.drawRect(0, 0, bounds.width, bounds.height);
+
 
 // rect
   //    graphics.lineStyle(2, 0x0000FF, 1);
@@ -608,6 +614,10 @@ planets.scale.setTo(0.25,0.25);
 
 
 function update4(){
+ if(rocket.body.position.x>800 || rocket.body.position.x<1190 || rocket.body.position.y>50 || rocket.body.position.y<230){
+
+
+
 if(cursors.left.isDown){
         rocket.body.velocity.x = -300; 
         rocket.angle = 180;  
@@ -663,6 +673,13 @@ if(cursors.left.isDown){
         rocket.angle = 45;
        // background.tilePosition.x -= 1;
     }
+}
+else{
+        rocket.body.velocity.x = 0;
+        rocket.body.velocity.y = 0;
+     }
+
+
 
     oscillation();
 }
