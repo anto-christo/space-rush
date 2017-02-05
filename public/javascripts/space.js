@@ -204,7 +204,9 @@ var scoreText;
 var score = 0;
 var score_dynamic=0;
 var scoreText;
-var hit,take,alert; 
+var hit,take,alert;
+var bmd; 
+var fl = 0;
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
  function preload2(){
@@ -263,6 +265,7 @@ var hit,take,alert;
     rocket.body.drag.set(1000);
     rocket.body.maxVelocity.set(300);
     rocket.anchor.set(0.5);
+    rocket.body.setSize(1200,720,120,72);
 
     hit = universe.add.audio('hit');
     take = universe.add.audio('take');
@@ -277,13 +280,13 @@ var hit,take,alert;
      k= 0;
 
      for(var i=0;i<300;i++){
-                console.log("in create2");
+            console.log("in create2");
             randX = 1200+Math.floor(Math.random()*100);
             randY = 50+Math.floor(Math.random()*500);
             st[i] = star.create(randX + k, randY, 'star');
             st[i].scale.setTo(0.4, 0.4);
             st[i].taken=0;
-            k+=750;
+            k+=700;
      }
 
       planets = universe.add.group();
@@ -320,7 +323,7 @@ var hit,take,alert;
         var r;
         r = Math.random()*h+l; 
         var s;
-        s = Math.random()*1.3+0.5;
+        s = Math.random()*1+0.2;
 
         var temp = Math.round(Math.random()*1);
 
@@ -337,16 +340,17 @@ var hit,take,alert;
         pl[i].speed = s;
         pl[i].angle = 0;
         pl[i].scale.setTo(0.18,0.18);
+        pl[i].body.setSize(34.2,34.2,155.8,155.8);
         pl[i].body.immovable = true;
         
      }
 
      cursors = universe.input.keyboard.createCursorKeys();
 
-     var bmd = universe.add.bitmapData(1400,40);
+         bmd = universe.add.bitmapData(1400,40);
 
          bmd.ctx.beginPath();
-         bmd.ctx.rect(0,0,1300,50);
+         bmd.ctx.rect(0,0,1300,40);
          bmd.ctx.fillStyle = 'red';
          bmd.ctx.fill();
 
@@ -384,7 +388,7 @@ function update2(){
         for(j=q;j<q+4;j++){
             pl[j].x = st[i].position.x + Math.cos(pl[j].angle+=pl[j].dir*pl[j].speed/150)*pl[j].radius;
             pl[j].y = st[i].position.y + Math.sin(pl[j].angle+=pl[j].dir*pl[j].speed/150)*pl[j].radius;
-            st[i].body.velocity.x = -450;
+            st[i].body.velocity.x = -425;
             universe.physics.arcade.overlap(rocket, st[i], collect, null , this);
         }
 
@@ -452,35 +456,19 @@ function update2(){
     }
 
     if(  healthBar.width<0){
-    universe.state.start('gameOver');
+        alert.stop();
+        fuel = 1;
+        universe.state.start('gameOver');
     }
 	
 	 universe.physics.arcade.overlap(rocket, planets, impact, null, this);
 }
 
 
-
-function impact(){
-  
-    blast.x = rocket.body.position.x;
-    blast.y = rocket.body.position.y;
-
-    blast.visible = true;
-    blast.animations.play('expl');
-    //setTimeout(blast.kill,1000);
-
-    rocket.kill();
-    universe.camera.shake(0.03, 1000);
-    universe.camera.shake(0.02, 1000);
-
-    hit.play();
-
-    setTimeout(over,1000);
-}
-
-
 function preload3(){
 
+      universe.load.image('table','images/table.png');
+      universe.load.image('bg','images/space_bg.png');
 }
 
 var scoreText;
@@ -488,7 +476,14 @@ var scoreText;
 
 
 function create3(){
+    background = universe.add.tileSprite(0, 0, window.innerWidth*window.devicePixelRatio, window.innerHeight*window.devicePixelRatio, 'bg');
+    
+    if(fl = 0)
     scoreText = universe.add.text(200, 200, 'Game Over! \n\nFinal Score: '+score , { fontSize: '32px', fill: '#FFF'});
+    
+    if(fl = 1)
+    scoreText = universe.add.text(200, 200, 'Out Of Fuel !! \n\nFinal Score: '+score , { fontSize: '32px', fill: '#FFF'});
+
     scoreText.anchor.setTo(0.5,0.5);
 
     console.log("Game state 2 entered !!");
@@ -509,8 +504,15 @@ function create3(){
         }
         });
 
+        var table = universe.add.image(200,200,'table');
+        var gap=0;
 
-        $.ajax({
+    table.anchor.setTo(0.5,0.5);
+
+    table.x = universe.world.width/2;
+    table.y = universe.world.height/2;
+
+    $.ajax({
         type: 'GET',
         url: '/ret_score',
         dataType: 'json',
@@ -518,8 +520,9 @@ function create3(){
             
             for(var j=0;j<10;j++)
             {
-                var lead = universe.add.text(universe.world.width/2,100+j*30,response[j].score,{fontSize: '15px', fill:'white'});
+                var lead = universe.add.text(845,168+gap,response[j].score,{fontSize: '15px', fill:'white'});
                 lead.anchor.setTo(0.5,0.5);
+                gap+=42;
             }
         }
         });
@@ -538,8 +541,8 @@ function preload4(){
          universe.load.image('bg','images/space_bg.png');
          universe.load.image('arrow','images/arrows.png');
          universe.load.image('ship','images/ship.png');
-  universe.load.image('star','images/fuel.png');
-universe.load.image('pn1','images/planet1a.png');
+         universe.load.image('star','images/fuel.png');
+         universe.load.image('pn1','images/planet1a.png');
      
 
 }
@@ -666,11 +669,23 @@ if(cursors.left.isDown){
 
 function lpreload(){
 
+    universe.load.image('table','images/table.png');
+    universe.load.image('bg','images/space_bg.png');
+
 }
 
 function lcreate(){
+    
+    background = universe.add.tileSprite(0, 0, window.innerWidth*window.devicePixelRatio, window.innerHeight*window.devicePixelRatio, 'bg');
+    var board = universe.add.text(585,40,"LEADERBOARD",{fontSize: '30px', fill:'white'});
 
-    var board = universe.add.text(585,50,"LEADERBOARD",{fontSize: '30px', fill:'white'});
+    var table = universe.add.image(200,200,'table');
+    var gap=0;
+
+    table.anchor.setTo(0.5,0.5);
+
+    table.x = universe.world.width/2;
+    table.y = universe.world.height/2;
 
     $.ajax({
         type: 'GET',
@@ -680,8 +695,9 @@ function lcreate(){
             
             for(var j=0;j<10;j++)
             {
-                var lead = universe.add.text(universe.world.width/2,150+j*30,response[j].score,{fontSize: '15px', fill:'white'});
+                var lead = universe.add.text(845,168+gap,response[j].score,{fontSize: '15px', fill:'white'});
                 lead.anchor.setTo(0.5,0.5);
+                gap+=42;
             }
         }
         });
@@ -692,12 +708,41 @@ function lupdate(){
 
 }
 
+function impact(){
+  
+    blast.x = rocket.body.position.x;
+    blast.y = rocket.body.position.y;
+
+    blast.visible = true;
+    blast.animations.play('expl');
+
+    rocket.kill();
+    universe.camera.shake(0.03, 1000);
+    universe.camera.shake(0.02, 1000);
+
+    alert.stop();
+    hit.play();
+
+    setTimeout(over,1000);
+}
+
+var flag=0;
 
 function fuel(){
     healthBar.width-=4;
+    bmd.alpha=0;
 
-    if(healthBar.width==0.25*1300)
-        alert.play();
+    if(healthBar.width<600 && flag==0)
+        {
+            alert.play();
+            flag=1;
+        }
+
+    if(healthBar.width>=600 && flag==1)
+        {
+            alert.stop();
+            flag=0;
+        }  
 }
 
 
@@ -792,6 +837,7 @@ function unpause(x, y) {
 
 
 function over(){
+    alert.stop();
     universe.state.start('gameOver');
 }
 
