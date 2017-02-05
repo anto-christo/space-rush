@@ -477,12 +477,13 @@ var scoreText;
 
 function create3(){
     background = universe.add.tileSprite(0, 0, window.innerWidth*window.devicePixelRatio, window.innerHeight*window.devicePixelRatio, 'bg');
+    alert.stop();
     
     if(fl == 0)
-    scoreText = universe.add.text(200, 200, 'Game Over! \n\nFinal Score: '+score , { fontSize: '32px', fill: '#FFF'});
+    scoreText = universe.add.text(200, 200, 'Game Over! \n\nScore: '+score , { fontSize: '32px', fill: '#FFF'});
     
     if(fl == 1)
-    scoreText = universe.add.text(200, 200, 'Out Of Fuel !! \n\nFinal Score: '+score , { fontSize: '32px', fill: '#FFF'});
+    scoreText = universe.add.text(200, 200, 'Out Of Fuel !! \n\nScore: '+score , { fontSize: '32px', fill: '#FFF'});
 
     scoreText.anchor.setTo(0.5,0.5);
 
@@ -695,12 +696,11 @@ function lcreate(){
             
             for(var j=0;j<10;j++)
             {
-                var lead = universe.add.text(845,168+gap,response[j].score,{fontSize: '15px', fill:'white'});
-                lead.anchor.setTo(0.5,0.5);
+                lead = universe.add.text(table.x+140,table.y-175+gap,response[j].score,{fontSize: '15px', fill:'white'});
                 gap+=42;
             }
         }
-        });
+    });
 
 }
 
@@ -733,13 +733,13 @@ var flag=0;
 function fuel(){
     healthBar.width-=4;
 
-    if(healthBar.width<600 && flag==0)
+    if(healthBar.width<400 && flag==0)
         {
             alert.play();
             flag=1;
         }
 
-    if(healthBar.width>=600 && flag==1)
+    if(healthBar.width>=400 && flag==1)
         {
             alert.stop();
             flag=0;
