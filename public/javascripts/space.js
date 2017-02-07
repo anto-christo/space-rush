@@ -55,9 +55,10 @@ howtoplay.prototype = {
  var fullButton;
  var fullButton_scale = 0.3;
  var button;
- var video;
+ var music;
  var w,s,a,d;
-  
+var pop;
+
 universe.state.add('gameState1',gameState1);
 universe.state.add('gameState2', gameState2);
 universe.state.add('gameOver',gameOver);
@@ -67,11 +68,14 @@ universe.state.start('gameState1');
 
 
 function preload(){
-         universe.load.image('button','images/button-start-game.png')
-         universe.load.spritesheet('fullButton','images/fullButton.png', 125, 100);
-        universe.load.video('video', 'images/video.mp4');
+       //  universe.load.image('button','images/button-start-game.png')
+         universe.load.image('fullButton','images/fullButton.png');
+       // universe.load.video('video', 'images/video.mp4');
          universe.load.image('ship','images/ship.png');
          universe.load.image('lp','images/lp.png');
+          universe.load.audio('pop','audio/pop.wav');
+universe.load.image('fullButton','images/fullButton.png');
+universe.load.audio('music', 'audio/lp.mp3');
     
 
 }
@@ -100,13 +104,18 @@ function preload(){
      s = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.S);
      d = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.D);
 
-   
-   
+music = universe.add.audio('music');   
+   music.play();
+
+   pop = universe.add.audio('pop');
        
 //fullscreen
     universe.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     universe.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-
+ fullButton = universe.add.button(1050, 48, 'fullButton', goFull, this, 2, 1, 0);
+        fullButton.input.priorityID = 0;
+        fullButton.scale.setTo(0.018,0.018);
+        
 
 }
 
@@ -177,16 +186,19 @@ if (universe.input.activePointer.isDown)
         if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.53 &&y<window.innerHeight*0.616) 
         {
             universe.state.start('gameState2'); //play button
+            pop.play();
         }
 
         else if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.65 &&y<window.innerHeight*0.724) 
         {
             universe.state.start('howtoplay');
+            pop.play();
         }
         
         else if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.72 &&y<window.innerHeight*0.832) 
         {
             universe.state.start('leaderboard');
+            pop.play();
         }
     }
 
@@ -235,7 +247,7 @@ var fl = 0;
 	 universe.load.image('play','images/play.png');
      universe.load.image('pausemenu','images/pausemenu.png');
      universe.load.spritesheet('blast', 'images/flame.png',64,64);
-     universe.load.spritesheet('fullButton','images/fullButton.png', 125, 100);
+     universe.load.image('fullButton','images/fullButton.png');
 
      universe.load.audio('hit','audio/hit.mp3');
      universe.load.audio('take','audio/take.mp3');
@@ -366,14 +378,14 @@ var fl = 0;
 
  //fullscreen
 
-        fullButton = universe.add.button(1250, 50, 'fullButton', goFull, this, 2, 1, 0);
+        fullButton = universe.add.button(1250, 48, 'fullButton', goFull, this, 2, 1, 0);
         fullButton.input.priorityID = 0;
-        fullButton.scale.setTo(fullButton_scale, fullButton_scale);
+        fullButton.scale.setTo(0.018,0.018);
 		
 	//pause button
 
 		pauseButton= universe.add.button(1300, 40, 'pause', pause_game, this, 2, 1, 0);
-		pauseButton.scale.setTo(0.1, 0.1);
+		pauseButton.scale.setTo(0.18, 0.18);
 
 
 }
@@ -465,20 +477,28 @@ function update2(){
 }
 //--------------------------------------------------------------------------------------------------------------------------
 
+var home;
+var play;
+var scoreText;
+
+
+
 function preload3(){
 
       universe.load.image('table','images/table.png');
       universe.load.image('bg','images/space_bg.png');
+           universe.load.image('home','images/home.png');
+    universe.load.image('play','images/play.png');
+      universe.load.audio('pop','audio/pop.wav');
+
 }
-
-var scoreText;
-
-
 
 function create3(){
     background = universe.add.tileSprite(0, 0, window.innerWidth*window.devicePixelRatio, window.innerHeight*window.devicePixelRatio, 'bg');
     alert.stop();
     
+     pop = universe.add.audio('pop');
+
     if(fl == 0)
     scoreText = universe.add.text(200, 200, 'Game Over! \n\nScore: '+score , { fontSize: '32px', fill: '#FFF'});
     
@@ -527,6 +547,27 @@ function create3(){
             }
         }
         });
+
+
+play= universe.add.button(  0, 0, 'play', actionOnPlay);
+        play.scale.setTo(0.9,0.9);
+
+         function actionOnPlay () {
+            pop.play();
+        universe.state.start('gameState2');
+               
+}
+
+home= universe.add.button(40, 30, 'home', actionOnClick);
+        home.scale.setTo(0.12, 0.12);
+
+         function actionOnClick () {
+pop.play();
+        universe.state.start('gameState1');
+               
+}
+
+
 };
 
 function update3(){
@@ -544,7 +585,11 @@ function preload4(){
          universe.load.image('ship','images/ship.png');
          universe.load.image('star','images/fuel.png');
          universe.load.image('pn1','images/planet1a.png');
-     
+            universe.load.image('play','images/play.png'); 
+            universe.load.image('fullButton','images/fullButton.png');
+          universe.load.audio('pop','audio/pop.wav');
+          universe.load.image('home','images/home.png');
+    
 
 }
 function create4(){
@@ -552,29 +597,29 @@ function create4(){
      background = universe.add.tileSprite(0, 0,window.innerWidth, window.innerHeight, 'bg');
            arrows = universe.add.image(60,100, 'arrow');
         arrows.scale.setTo(0.4,0.4);
-
+         pop = universe.add.audio('pop');
     var style = { font: '18pt Hobo Std', fill: 'white', align: 'justified', wordWrap: true, wordWrapWidth: 1135 };
     
     var styleTitle = { font: '25pt Hobo Std', fill: 'white', align: 'justified', wordWrap: true, wordWrapWidth: 1135 };
     var styleline = {fill:'white'};
 
-var bounds = new Phaser.Rectangle(800,50,390,180);
+//var bounds = new Phaser.Rectangle(800,50,390,180);
 
- rocket = universe.add.sprite(bounds.centerX, bounds.centerY, 'ship');
+ rocket = universe.add.sprite(850, 95, 'ship');
       rocket.scale.setTo(0.1,0.1);
-     universe.physics.arcade.enable(rocket);
-     rocket.body.collideWorldBounds = true;
-     rocket.body.drag.set(1000);
-     rocket.body.maxVelocity.set(300);
-     rocket.anchor.set(0.5);
+     // universe.physics.arcade.enable(rocket);
+     // rocket.body.collideWorldBounds = true;
+     // rocket.body.drag.set(1000);
+     // rocket.body.maxVelocity.set(300);
+     // rocket.anchor.set(0.5);
      
 cursors = universe.input.keyboard.createCursorKeys();
      spc = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
-     var graphics = universe.add.graphics(0, 0);
+    //  var graphics = universe.add.graphics(0, 0);
 
-        var graphics = universe.add.graphics(bounds.x, bounds.y);
-    graphics.lineStyle(4, 0xffd900, 1);
-    graphics.drawRect(0, 0, bounds.width, bounds.height);
+    //     var graphics = universe.add.graphics(bounds.x, bounds.y);
+    // graphics.lineStyle(4, 0xffffff, 1);
+    // graphics.drawRect(0, 0, bounds.width, bounds.height);
 
 
 // rect
@@ -606,78 +651,102 @@ star.scale.setTo(0.45,0.45);
 
 planets = universe.add.image(820,380, 'pn1');
 planets.scale.setTo(0.25,0.25);
+ pop = universe.add.audio('pop');
 
- // rect = new Phaser.Rectangle(880,100,850,200);
+
+ play= universe.add.button(100, 100, 'play', actionOnPlay);
+        play.scale.setTo(0.9,0.9);
+
+         function actionOnPlay () {
+            pop.play();
+        universe.state.start('gameState2');
+               
+}
+home= universe.add.button(400, 450, 'home', actionOnClick);
+        home.scale.setTo(0.12, 0.12);
+
+         function actionOnClick () {
+pop.play();
+        universe.state.start('gameState1');
+               
+}
+
+universe.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    universe.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+ fullButton = universe.add.button(1050, 48, 'fullButton', goFull, this, 2, 1, 0);
+        fullButton.input.priorityID = 0;
+        fullButton.scale.setTo(0.018,0.018);
+        
 }
 
 
 
 
 function update4(){
- if(rocket.body.position.x>800 || rocket.body.position.x<1190 || rocket.body.position.y>50 || rocket.body.position.y<230){
+//  if(rocket.body.position.x>800 || rocket.body.position.x<1190 || rocket.body.position.y>50 || rocket.body.position.y<230){
 
 
 
-if(cursors.left.isDown){
-        rocket.body.velocity.x = -300; 
-        rocket.angle = 180;  
+// if(cursors.left.isDown){
+//         rocket.body.velocity.x = -300; 
+//         rocket.angle = 180;  
         
-    }
+//     }
 
-    else if(cursors.right.isDown){
-        rocket.body.velocity.x = 300;
-        rocket.angle = 0;
-        }
+//     else if(cursors.right.isDown){
+//         rocket.body.velocity.x = 300;
+//         rocket.angle = 0;
+//         }
 
-    else if(cursors.up.isDown){
-        rocket.body.velocity.y = -300;
-        rocket.body.velocity.x = 0;
-        rocket.angle = 270; 
-    }
+//     else if(cursors.up.isDown){
+//         rocket.body.velocity.y = -300;
+//         rocket.body.velocity.x = 0;
+//         rocket.angle = 270; 
+//     }
 
-    else if(cursors.down.isDown){
-        rocket.body.velocity.y = 300;
-        rocket.body.velocity.x = 0;
-        rocket.angle = 90;
-     }
+//     else if(cursors.down.isDown){
+//         rocket.body.velocity.y = 300;
+//         rocket.body.velocity.x = 0;
+//         rocket.angle = 90;
+//      }
 
-    else{
-        rocket.body.velocity.x = 0;
-        rocket.body.velocity.y = 0;
-     }
+//     else{
+//         rocket.body.velocity.x = 0;
+//         rocket.body.velocity.y = 0;
+//      }
 
-    if(cursors.left.isDown && cursors.up.isDown){
-        rocket.body.velocity.x = -300;
-        rocket.body.velocity.y = -300;
-        rocket.angle = 225;   
-        //background.tilePosition.x -= 1;               
-    }
+//     if(cursors.left.isDown && cursors.up.isDown){
+//         rocket.body.velocity.x = -300;
+//         rocket.body.velocity.y = -300;
+//         rocket.angle = 225;   
+//         //background.tilePosition.x -= 1;               
+//     }
 
-    if(cursors.left.isDown && cursors.down.isDown){
-        rocket.body.velocity.x = -300;
-        rocket.body.velocity.y = 300;
-        rocket.angle = 135; 
-        //background.tilePosition.x -= 1;                 
-    }
+//     if(cursors.left.isDown && cursors.down.isDown){
+//         rocket.body.velocity.x = -300;
+//         rocket.body.velocity.y = 300;
+//         rocket.angle = 135; 
+//         //background.tilePosition.x -= 1;                 
+//     }
 
-    if(cursors.right.isDown && cursors.up.isDown){
-        rocket.body.velocity.x = 300;
-        rocket.body.velocity.y = -300;
-        rocket.angle = 315; 
-       // background.tilePosition.x -= 1;                 
-    }
+//     if(cursors.right.isDown && cursors.up.isDown){
+//         rocket.body.velocity.x = 300;
+//         rocket.body.velocity.y = -300;
+//         rocket.angle = 315; 
+//        // background.tilePosition.x -= 1;                 
+//     }
 
-    if(cursors.right.isDown && cursors.down.isDown){
-        rocket.body.velocity.x = 300;
-        rocket.body.velocity.y = 300;
-        rocket.angle = 45;
-       // background.tilePosition.x -= 1;
-    }
-}
-else{
-        rocket.body.velocity.x = 0;
-        rocket.body.velocity.y = 0;
-     }
+//     if(cursors.right.isDown && cursors.down.isDown){
+//         rocket.body.velocity.x = 300;
+//         rocket.body.velocity.y = 300;
+//         rocket.angle = 45;
+//        // background.tilePosition.x -= 1;
+//     }
+// }
+// else{
+//         rocket.body.velocity.x = 0;
+//         rocket.body.velocity.y = 0;
+//      }
 
 
 
@@ -686,7 +755,9 @@ else{
 //---------------------------------------------------------------------------------------------------------------------------
 
 function lpreload(){
-
+      universe.load.audio('pop','audio/pop.wav');
+        universe.load.image('home','images/home.png');
+    universe.load.image('play','images/play.png');
     universe.load.image('table','images/table.png');
     universe.load.image('bg','images/space_bg.png');
 
@@ -699,7 +770,7 @@ function lcreate(){
 
     var table = universe.add.image(200,200,'table');
     var gap=0;
-
+ pop = universe.add.audio('pop');
     table.anchor.setTo(0.5,0.5);
 
     table.x = universe.world.width/2;
@@ -718,6 +789,26 @@ function lcreate(){
             }
         }
     });
+
+play= universe.add.button(  0, 0, 'play', actionOnPlay);
+        play.scale.setTo(0.9,0.9);
+
+         function actionOnPlay () {
+            pop.play();
+        universe.state.start('gameState2');
+               
+}
+
+home= universe.add.button(40, 30, 'home', actionOnClick);
+        home.scale.setTo(0.12, 0.12);
+
+         function actionOnClick () {
+pop.play();
+        universe.state.start('gameState1');
+               
+}
+
+
 
 }
 
