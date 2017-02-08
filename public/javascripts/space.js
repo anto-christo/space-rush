@@ -55,9 +55,7 @@ howtoplay.prototype = {
  var fullButton;
  var fullButton_scale = 0.3;
  var button;
- var music;
- var w,s,a,d;
-var pop;
+ 
 
 universe.state.add('gameState1',gameState1);
 universe.state.add('gameState2', gameState2);
@@ -68,14 +66,11 @@ universe.state.start('gameState1');
 
 
 function preload(){
-       //  universe.load.image('button','images/button-start-game.png')
-         universe.load.image('fullButton','images/fullButton.png');
-       // universe.load.video('video', 'images/video.mp4');
+         universe.load.image('button','images/button-start-game.png')
+         universe.load.spritesheet('fullButton','images/fullButton.png', 125, 100);
+        universe.load.video('video', 'images/video.mp4');
          universe.load.image('ship','images/ship.png');
          universe.load.image('lp','images/lp.png');
-          universe.load.audio('pop','audio/pop.wav');
-universe.load.image('fullButton','images/fullButton.png');
-universe.load.audio('music', 'audio/lp.mp3');
     
 
 }
@@ -104,18 +99,13 @@ universe.load.audio('music', 'audio/lp.mp3');
      s = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.S);
      d = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.D);
 
-music = universe.add.audio('music');   
-   music.play();
-
-   pop = universe.add.audio('pop');
+   
+   
        
 //fullscreen
     universe.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     universe.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
- fullButton = universe.add.button(1050, 48, 'fullButton', goFull, this, 2, 1, 0);
-        fullButton.input.priorityID = 0;
-        fullButton.scale.setTo(0.018,0.018);
-        
+
 
 }
 
@@ -186,19 +176,16 @@ if (universe.input.activePointer.isDown)
         if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.53 &&y<window.innerHeight*0.616) 
         {
             universe.state.start('gameState2'); //play button
-            pop.play();
         }
 
         else if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.65 &&y<window.innerHeight*0.724) 
         {
             universe.state.start('howtoplay');
-            pop.play();
         }
         
         else if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.72 &&y<window.innerHeight*0.832) 
         {
             universe.state.start('leaderboard');
-            pop.play();
         }
     }
 
@@ -219,6 +206,11 @@ var scoreText;
 var hit,take,alert;
 var bmd; 
 var fl = 0;
+var username='Jaffrey';
+
+var uname;
+var scr;
+var nmb;
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
  function preload2(){
@@ -243,8 +235,8 @@ var fl = 0;
      universe.load.image('star','images/fuel.png');
      universe.load.image('bg','images/space_bg.png');
      universe.load.image('ship','images/ship.png');
-	 universe.load.image('pause','images/pause.png');
-	 universe.load.image('play','images/play.png');
+   universe.load.image('pause','images/pause.png');
+   universe.load.image('play','images/play.png');
      universe.load.image('pausemenu','images/pausemenu.png');
      universe.load.spritesheet('blast', 'images/flame.png',64,64);
      universe.load.image('fullButton','images/fullButton.png');
@@ -257,16 +249,27 @@ var fl = 0;
 
 //-------------------------------------------------------------------------------------------------------------------------------
  function create2(){
-    score = 0;
-    score_dynamic=0;
     background = universe.add.tileSprite(0, 0, window.innerWidth*window.devicePixelRatio, window.innerHeight*window.devicePixelRatio, 'bg');
      
     universe.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
     universe.scale.setResizeCallback(this.gameResized, this);
 
     universe.physics.startSystem(Phaser.Physics.ARCADE);
+
+    score=0;
+
+    // var temp = Math.round(Math.random()*3);
+
+    // if(temp==0)
+    //     username = 'Haramrit';
+
+    // else if(temp==1)
+    //     username = 'Akash';
+
+    // else
+    //     username = 'Anto';
      
-	blast = universe.add.sprite(0,0,'blast');
+  blast = universe.add.sprite(0,0,'blast');
     blast.visible=false;
     blast.animations.add('expl',[0,1,2,3,4,5,6,7,8],10,false);
     blast.scale.setTo(2,2)
@@ -311,7 +314,7 @@ var fl = 0;
         if(i%3==0)
         pl[i] = planets.create(1000 , 300, 'pn1');
 
-		else if(i%5==0)
+    else if(i%5==0)
         pl[i] = planets.create(1000 , 300, 'pn4');
 
         else if(i%7==0)
@@ -328,7 +331,7 @@ var fl = 0;
 
         else
         pl[i] = planets.create(1000 , 300, 'pn12');
-		
+    
         if(i%4==0){
             l=150;
             h=60;
@@ -380,14 +383,14 @@ var fl = 0;
 
  //fullscreen
 
-        fullButton = universe.add.button(1250, 48, 'fullButton', goFull, this, 2, 1, 0);
+        fullButton = universe.add.button(universe.world.width-150, universe.world.height-625, 'fullButton', goFull, this, 2, 1, 0);
         fullButton.input.priorityID = 0;
-        fullButton.scale.setTo(0.018,0.018);
-		
-	//pause button
+        fullButton.scale.setTo(0.015,0.015);
+    
+  //pause button
 
-		pauseButton= universe.add.button(1300, 40, 'pause', pause_game, this, 2, 1, 0);
-		pauseButton.scale.setTo(0.18, 0.18);
+    pauseButton= universe.add.button(1300, 40, 'pause', pause_game, this, 2, 1, 0);
+    pauseButton.scale.setTo(0.1, 0.1);
 
 
 }
@@ -474,47 +477,140 @@ function update2(){
         fl = 1;
         universe.state.start('gameOver');
     }
-	
-	 universe.physics.arcade.overlap(rocket, planets, impact, null, this);
+  
+   universe.physics.arcade.overlap(rocket, planets, impact, null, this);
 }
-//--------------------------------------------------------------------------------------------------------------------------
-
-var home;
-var play;
-var scoreText;
-
 
 
 function preload3(){
 
-      universe.load.image('table','images/table.png');
-      universe.load.image('bg','images/space_bg.png');
-           universe.load.image('home','images/home.png');
-    universe.load.image('play','images/play.png');
       universe.load.audio('pop','audio/pop.wav');
-
+        universe.load.image('home','images/home.png');
+    universe.load.image('play','images/play.png');
+    universe.load.image('table','images/table.png');
+    universe.load.image('bg','images/space_bg.png');
 }
+
+var scoreText;
+
+var count=0;
 
 function create3(){
     background = universe.add.tileSprite(0, 0, window.innerWidth*window.devicePixelRatio, window.innerHeight*window.devicePixelRatio, 'bg');
     alert.stop();
-    
-     pop = universe.add.audio('pop');
 
     if(fl == 0)
-    scoreText = universe.add.text(200, 200, 'Game Over! \n\nScore: '+score , { fontSize: '32px', fill: '#FFF'});
+    scoreText = universe.add.text(universe.world.width/2, 70, 'Game Over! \n\t\tScore: '+score, { fontSize: '32px', fill: '#FFF'});
     
     if(fl == 1)
-    scoreText = universe.add.text(200, 200, 'Out Of Fuel !! \n\nScore: '+score , { fontSize: '32px', fill: '#FFF'});
+    scoreText = universe.add.text(universe.world.width/2, 70, 'Out Of Fuel !! \n\t\tScore: '+score, { fontSize: '32px', fill: '#FFF'});
 
     scoreText.anchor.setTo(0.5,0.5);
 
-    console.log("Game state 2 entered !!");
-        console.log(score);
+
+        $.ajax({
+        type: 'GET',
+        url: '/ret_score',
+        dataType: 'json',
+        success: function(response){
+
+            var j=0;
+            while(response[j]!==null)
+            {
+                if(username===response[j].username)
+                {
+                    count=1;
+                    break;
+                }
+
+                j++;
+           }
+       }
+    });
+
+        $.ajax({
+        type: 'GET',
+        url: '/ret_score',
+        dataType: 'json',
+        success: function(response){
+
+            var j=0;
+            
+            if(count==1)
+            {
+                while(response[j]!==null)
+                {
+                    if(username===response[j].username)
+                    {
+
+                        if(score>response[j].score)
+                            {
+                                console.log("High score sent!!");
+                                send_score();
+                                setTimeout(rec_score,500);
+                                break;
+                            }
+  
+                        else
+                            {
+                                console.log("Score not sent!!");
+                                setTimeout(rec_score,500);
+                                break;
+                            }
+                    }
+
+                    j++;
+                }
+            }
+
+            else
+            {
+                send_score();
+                setTimeout(rec_score,500);
+            }
+
+       }
+    });
+
+
+    pop = universe.add.audio('pop');
+
+    play= universe.add.button(  universe.world.width-170, universe.world.height-70, 'play', actionOnPlay);
+    play.anchor.setTo(0.5,0.5);
+
+    play.scale.setTo(0.7,0.7);
+
+         
+    function actionOnPlay () {
+            pop.play();
+        universe.state.start('gameState2');
+               
+    }
+
+        home= universe.add.button(10, 10, 'home', actionOnClick);
+        home.scale.setTo(0.5, 0.5);
+
+         function actionOnClick () {
+        pop.play();
+        universe.state.start('gameState1');
+               
+        }
+            
+
+}
+
+function update3(){
+
+}
+
+
+function send_score(){
+    console.log(score);
+        console.log(username);
         $.ajax({
         type: 'POST',
         url: '/input_score',
-        data: { score:score },
+        data: {username:username , score:score},
         dataType: 'json',
         success: function(response){
             if(response.msg === "success"){
@@ -527,53 +623,48 @@ function create3(){
         }
         });
 
-        var table = universe.add.image(200,200,'table');
+
+
+}
+
+function rec_score(){
+   
+    var table = universe.add.image(200,200,'table');
         var gap=0;
 
     table.anchor.setTo(0.5,0.5);
 
     table.x = universe.world.width/2;
-    table.y = universe.world.height/2;
+    table.y = universe.world.height/2+30;
+
+    rank = universe.add.text(table.x-160,table.y-210+gap,"RANK",{fontSize: '15px', fill:'white'});
+    uname = universe.add.text(table.x,table.y-210+gap,"USERNAME",{fontSize: '15px', fill:'white'});
+    sc = universe.add.text(table.x+152,table.y-210+gap,"SCORE",{fontSize: '15px', fill:'white'});
+
+    rank.anchor.setTo(0.5,0.5);
+    uname.anchor.setTo(0.5,0.5);
+    sc.anchor.setTo(0.5,0.5);
+  
 
     $.ajax({
         type: 'GET',
         url: '/ret_score',
         dataType: 'json',
         success: function(response){
-            
-            for(var j=0;j<10;j++)
+            console.log(response);
+            var j=0;
+            while(response[j]!==null && j<10)
             {
-                var lead = universe.add.text(845,168+gap,response[j].score,{fontSize: '15px', fill:'white'});
-                lead.anchor.setTo(0.5,0.5);
-                gap+=42;
+                    scr = universe.add.text(table.x+140,table.y-175+gap,response[j].score,{fontSize: '15px', fill:'white'});
+                    nmb = universe.add.text(table.x-160,table.y-175+gap,j+1,{fontSize: '15px', fill:'white'});
+        
+                    uname = universe.add.text(table.x,table.y-165+gap,response[j].username,{fontSize: '15px', fill:'white'});
+                    uname.anchor.setTo(0.5,0.5);
+                    gap+=42;
+                    j++;
             }
         }
-        });
-
-
-play= universe.add.button(  0, 0, 'play', actionOnPlay);
-        play.scale.setTo(0.9,0.9);
-
-         function actionOnPlay () {
-            pop.play();
-        universe.state.start('gameState2');
-               
-}
-
-home= universe.add.button(40, 30, 'home', actionOnClick);
-        home.scale.setTo(0.12, 0.12);
-
-         function actionOnClick () {
-pop.play();
-        universe.state.start('gameState1');
-               
-}
-
-
-};
-
-function update3(){
-
+    });
 }
 
 var arrows;
@@ -653,31 +744,28 @@ star.scale.setTo(0.45,0.45);
 
 planets = universe.add.image(820,380, 'pn1');
 planets.scale.setTo(0.25,0.25);
- pop = universe.add.audio('pop');
+pop = universe.add.audio('pop');
 
+    play= universe.add.button(  universe.world.width-170, universe.world.height-70, 'play', actionOnPlay);
+    play.anchor.setTo(0.5,0.5);
 
- play= universe.add.button(100, 100, 'play', actionOnPlay);
-        play.scale.setTo(0.9,0.9);
+    play.scale.setTo(0.7,0.7);
 
-         function actionOnPlay () {
+         
+    function actionOnPlay () {
             pop.play();
         universe.state.start('gameState2');
                
-}
-home= universe.add.button(400, 450, 'home', actionOnClick);
-        home.scale.setTo(0.12, 0.12);
+    }
+
+        home= universe.add.button(10, 10, 'home', actionOnClick);
+        home.scale.setTo(0.5, 0.5);
 
          function actionOnClick () {
-pop.play();
+        pop.play();
         universe.state.start('gameState1');
                
-}
-
-universe.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    universe.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
- fullButton = universe.add.button(1050, 48, 'fullButton', goFull, this, 2, 1, 0);
-        fullButton.input.priorityID = 0;
-        fullButton.scale.setTo(0.018,0.018);
+        }
         
 }
 
@@ -768,49 +856,33 @@ function lpreload(){
 function lcreate(){
     
     background = universe.add.tileSprite(0, 0, window.innerWidth*window.devicePixelRatio, window.innerHeight*window.devicePixelRatio, 'bg');
-    var board = universe.add.text(585,40,"LEADERBOARD",{fontSize: '30px', fill:'white'});
+    var board = universe.add.text(universe.world.width/2,40,"LEADERBOARD",{fontSize: '30px', fill:'white'});
+    board.anchor.setTo(0.5,0,5);
 
-    var table = universe.add.image(200,200,'table');
-    var gap=0;
- pop = universe.add.audio('pop');
-    table.anchor.setTo(0.5,0.5);
+    pop = universe.add.audio('pop');
 
-    table.x = universe.world.width/2;
-    table.y = universe.world.height/2;
+    play= universe.add.button(  universe.world.width-170, universe.world.height-70, 'play', actionOnPlay);
+    play.anchor.setTo(0.5,0.5);
 
-    $.ajax({
-        type: 'GET',
-        url: '/ret_score',
-        dataType: 'json',
-        success: function(response){
-            
-            for(var j=0;j<10;j++)
-            {
-                lead = universe.add.text(table.x+140,table.y-175+gap,response[j].score,{fontSize: '15px', fill:'white'});
-                gap+=42;
-            }
-        }
-    });
+    play.scale.setTo(0.7,0.7);
 
-play= universe.add.button(  0, 0, 'play', actionOnPlay);
-        play.scale.setTo(0.9,0.9);
-
-         function actionOnPlay () {
+         
+    function actionOnPlay () {
             pop.play();
         universe.state.start('gameState2');
                
-}
+    }
 
-home= universe.add.button(40, 30, 'home', actionOnClick);
-        home.scale.setTo(0.12, 0.12);
+        home= universe.add.button(10, 10, 'home', actionOnClick);
+        home.scale.setTo(0.5, 0.5);
 
          function actionOnClick () {
-pop.play();
+        pop.play();
         universe.state.start('gameState1');
                
-}
+        }
 
-
+   rec_score();
 
 }
 
@@ -841,7 +913,7 @@ function impact(){
 var flag=0;
 
 function fuel(){
-    healthBar.width-=4;
+    healthBar.width-=3.7;
 
     if(healthBar.width<400 && flag==0)
         {

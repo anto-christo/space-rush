@@ -3,35 +3,83 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var _ = require('underscore');
 var User = require('../models/User');
+var request = require('./request');
 
+// router.get('/', function(req, res, next){
+// 	if(req.sess && req.sess.username)
+// 	res.render('index');
 
-router.get('/', function(req, res, next){
+//     else
+//     {
+//     	res.redirect('www.facebook.com');
+//     }
+// });
+
+router.get('/', function(req, res ,next){
 	res.render('index');
-})
+});
 
 router.get('/ret_score', function(req, res, next){
-	User.find({},"score",{sort:{'score':'desc'}},function(err, score){
+	User.find({},"score username",{sort:{'score':'desc'}},function(err, score){
 		res.send(score);
 	});
 });
+		
 
 router.post('/input_score', function(req, res, next){
 	var score = req.body.score;
-	
+	var username = req.body.username;
 	console.log(score);
-		var new_user = new User();
-			new_user.score = score;
+	console.log(username);
+		
+		User.count({username:username}, function(err,count){
 
-			new_user.save(function(err, newuser){
-				if(err){
+			if(err)
+			   throw err;
+
+			if(count>0){
+				//username='Anto';
+				//username=req.sess.username;
+				User.update({username:username},{$set:{score : score}},{multi :true}, function(err,user){
+					if(err)
+						throw err;
+
+					request.updateScore("spaceRush",score,username,function(result){
+					console.log("update Done?:"+result);
+				});
+
+                   console.log(user);
+                   res.send(JSON.stringify({'msg':'success'}));
+                
+				});
+
+				
+			}
+
+			else
+			{
+				var new_user = new User();
+				new_user.username = username;
+				new_user.score = score;
+
+				new_user.save(function(err, newuser){
+				  if(err){
 					console.log(err);
 					return res.status(500).send(JSON.stringify({'msg':'servererror'}));
 				}
 				else{
 					console.log('score sent from index');
+
+					request.updateScore("spaceRush",score,username,function(result){
+					console.log("update Done?:"+result);
+				     });
 					res.send(JSON.stringify({'msg':'success'}));
 				}
 			});
+
+				
+			}
+		});
 
 });
 

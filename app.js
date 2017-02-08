@@ -7,17 +7,36 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var session = require('express-session');
+var session = require('client-sessions');
 
 
 // include RESTful APIs in express
 var index = require('./routes/index');
 var users = require('./routes/users');
 
-
-
 // initialize express framework
 var app = express();
+
+//*****    client-sessions usage  **********//
+//cookie setup KEEP THIS THE SAME AS BELOW!!
+app.use(session({                
+	cookieName: "sess",
+	secret: "134klh389dbcbsldvn1mcbj",
+	duration: 30 * 60 * 1000, //30 min session duration
+	activeDuration: 5 * 60 * 1000 //5 min active session
+}));
+  
+//cookie usage 
+app.use(function (req, res, next) {   //enforce a cookie requirement for all requests starting with '/' 
+	if (!req.sess.username) {              //i.e. accessing the server needs session to be set
+		console.log("redirecting cookie not found");
+
+		res.redirect("http://localhost:3009/session");
+	} else {
+		next();
+	}
+});
+//****** END OF client-sessions usage ********//
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -51,7 +70,7 @@ app.use(express.static(path.join(__dirname, 'public'))); // default path to acce
 
 // routes definition
 app.use('/', index);	// base route e.g. www.teknack.in -> /
-
+//app.use('/game', game);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
 	var err = new Error('Not Found');	// error definition
@@ -71,5 +90,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;		// export express app as node module to initialized in /bin/www
