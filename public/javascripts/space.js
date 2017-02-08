@@ -257,6 +257,8 @@ var fl = 0;
 
 //-------------------------------------------------------------------------------------------------------------------------------
  function create2(){
+    score = 0;
+    score_dynamic=0;
     background = universe.add.tileSprite(0, 0, window.innerWidth*window.devicePixelRatio, window.innerHeight*window.devicePixelRatio, 'bg');
      
     universe.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
