@@ -2,13 +2,13 @@
 //Import this file as a module into whatever file updates the score on your DB
 var http = require("http");
 var options = {
-	hostname: '127.0.0.1',
-	port: 3000,
-	path: '',    //path used in router 
-	method: 'POST',                                //request method get or post
-	headers: {
-		'Content-Type': 'application/json',
-	}
+    hostname: '127.0.0.1',
+    port: 3000,
+    path: '',    //path used in router 
+    method: 'POST',                                //request method get or post
+    headers: {
+        'Content-Type': 'application/json',
+    }
 };
 //game table 
 /*

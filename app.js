@@ -31,7 +31,7 @@ app.use(function (req, res, next) {   //enforce a cookie requirement for all req
 	if (!req.sess.username) {              //i.e. accessing the server needs session to be set
 		console.log("redirecting cookie not found");
 
-		res.redirect("http://localhost:3009/session");
+		res.redirect("http://teknack.in");
 	} else {
 		next();
 	}
@@ -47,7 +47,7 @@ app.set('view engine', 'html'); // set html as default view/render engine
 
 // database connection
 // connection to mongodb should be created only once in the entire application. if database switch is necessary then previous connection needs to be close before initializing new connection
-mongoose.connect('mongodb://127.0.0.1:27017/space-rush'); // syntax: mongoose.connect('mongodb:hostaddress:configured_port/database_name');
+mongoose.connect('mongodb://rush2play:2kaad17@localhost:27017/space-rush'); // syntax: mongoose.connect('mongodb:hostaddress:configured_port/database_name');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

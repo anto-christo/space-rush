@@ -376,7 +376,7 @@ var nmb;
          healthBar.anchor.y = 0.5;
 
          universe.time.events.loop(Phaser.Timer.SECOND/60, fuel, this);
-         universe.time.events.loop(Phaser.Timer.SECOND*1, point, this);
+         universe.time.events.loop(Phaser.Timer.SECOND*1, inc_score, this);
 
 //showing score
         scoreText = universe.add.text(30, 30, 'SCORE: ' + score, { fontSize: '15px', fill: '#FFFF00' });
@@ -414,7 +414,7 @@ function update2(){
     }
 
     if(cursors.left.isDown){
-        rocket.body.velocity.x = -380; 
+        rocket.body.velocity.x = -430; 
         rocket.angle = 180;  
         background.tilePosition.x -= 2;              
     }
@@ -446,15 +446,15 @@ function update2(){
     }
 
     if(cursors.left.isDown && cursors.up.isDown){
-        rocket.body.velocity.x = -380;
-        rocket.body.velocity.y = -380;
+        rocket.body.velocity.x = -430;
+        rocket.body.velocity.y = -430;
         rocket.angle = 225;   
         //background.tilePosition.x -= 2;               
     }
 
     if(cursors.left.isDown && cursors.down.isDown){
-        rocket.body.velocity.x = -380;
-        rocket.body.velocity.y = 380;
+        rocket.body.velocity.x = -430;
+        rocket.body.velocity.y = 430;
         rocket.angle = 135; 
         //background.tilePosition.x -= 2;                 
     }
@@ -485,16 +485,17 @@ function update2(){
 
 function preload3(){
 
-      universe.load.audio('pop','audio/pop.wav');
-        universe.load.image('home','images/home.png');
+    universe.load.audio('pop','audio/pop.wav');
+    universe.load.image('home','images/home.png');
     universe.load.image('play','images/play.png');
     universe.load.image('table','images/table.png');
     universe.load.image('bg','images/space_bg.png');
 }
 
 var scoreText;
-
-var count=0;
+var point;
+var exist=0;
+var counts;
 
 function create3(){
     background = universe.add.tileSprite(0, 0, window.innerWidth*window.devicePixelRatio, window.innerHeight*window.devicePixelRatio, 'bg');
@@ -509,7 +510,7 @@ function create3(){
     scoreText.anchor.setTo(0.5,0.5);
 
 
-        $.ajax({
+       $.ajax({
         type: 'GET',
         url: '/ret_score',
         dataType: 'json',
@@ -520,7 +521,12 @@ function create3(){
             {
                 if(username===response[j].username)
                 {
-                    count=1;
+                    exist=1;
+                    counts=response[j].counts;
+                    console.log("response counts:"+counts);
+                    
+                    send_count();
+
                     break;
                 }
 
@@ -528,6 +534,8 @@ function create3(){
            }
        }
     });
+
+
 
         $.ajax({
         type: 'GET',
@@ -537,7 +545,7 @@ function create3(){
 
             var j=0;
             
-            if(count==1)
+            if(exist==1)
             {
                 while(response[j]!==null)
                 {
@@ -567,6 +575,7 @@ function create3(){
             else
             {
                 send_score();
+                send_count();
                 setTimeout(rec_score,500);
             }
 
@@ -597,11 +606,74 @@ function create3(){
                
         }
             
-
+    console.log("Mega Point:"+point);
 }
 
 function update3(){
 
+}
+
+function send_count(){
+        if(exist==0)
+          counts=0;
+
+        counts++;
+        console.log("counts++"+counts);
+
+        if(score<100)
+          point = 0;
+
+
+        if(score>=100 && score<149)
+          point = 50;
+
+        else if(score>=150 && score<299)
+          point = 75;
+
+        else if(score>=300 && score<499)
+          point = 150;
+
+        else if(score>=500 && score<699)
+          point = 250;
+
+        else if(score>=700 && score<999)
+          point = 350;
+
+        else if(score>=1000)
+        {
+
+          console.log("send counts:"+counts);
+
+          $.ajax({
+        type: 'POST',
+        url: '/input_count',
+        data: {username:username, counts:counts},
+        dataType: 'json',
+        success: function(response){
+            if(response.msg === "success"){
+                console.log('count sent from space.js');
+            }
+            else{
+                $('#error-msg').html('');
+                $('#error-msg').append('<span>Server error!</span>');
+            }
+        }
+        });
+
+          if(counts==1)
+            point = 475;
+
+          else if(counts==2)
+            point = 450;
+
+          else if(counts==3)
+            point = 425;
+          
+          else
+            point = 400;
+        }
+
+        send_mega();
 }
 
 
@@ -666,6 +738,26 @@ function rec_score(){
             }
         }
     });
+}
+
+
+function send_mega(){
+
+     $.ajax({
+        type: 'POST',
+        url: '/input_mega',
+        data: {username:username , point:point},
+        dataType: 'json',
+        success: function(response){
+            if(response.msg === "success"){
+                console.log('point sent from space.js');
+            }
+            else{
+                $('#error-msg').html('');
+                $('#error-msg').append('<span>Server error!</span>');
+            }
+        }
+        });
 }
 
 var arrows;
@@ -1029,8 +1121,8 @@ function over(){
 
 
 
-function point(){
-    score += 10;
+function inc_score(){
+    score += 100;
     scoreText.text = 'SCORE: ' + score;
 }
 

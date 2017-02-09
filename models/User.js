@@ -8,6 +8,11 @@ var userSchema = new mongoose.Schema({
 
     	score: {
         type: Number
+        },
+
+        counts:{
+        	type: Number,
+        	default: 0
         }
 });
 
