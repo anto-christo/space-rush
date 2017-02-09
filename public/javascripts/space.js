@@ -68,7 +68,8 @@ universe.state.start('gameState1');
 function preload(){
          universe.load.image('button','images/button-start-game.png')
          universe.load.spritesheet('fullButton','images/fullButton.png', 125, 100);
-        universe.load.video('video', 'images/video.mp4');
+         universe.load.audio('pop','audio/pop.wav');
+         universe.load.audio('music','audio/lp.mp3');
          universe.load.image('ship','images/ship.png');
          universe.load.image('lp','images/lp.png');
     
@@ -92,15 +93,11 @@ function preload(){
      rocket.anchor.set(0.5);
      
      cursors = universe.input.keyboard.createCursorKeys();
-     //spc = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
 
-     w = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.W);
-     a = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.A);
-     s = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.S);
-     d = universe.input.keyboard.addKeyCapture(Phaser.Keyboard.D);
+     music = universe.add.audio('music');
+     music.play();
 
-   
-   
+     pop = universe.add.audio('pop');   
        
 //fullscreen
     universe.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -206,8 +203,8 @@ var scoreText;
 var hit,take,alert;
 var bmd; 
 var fl = 0;
-var username='Jaffrey';
-
+var username='Anto';
+var pmenu;
 var uname;
 var scr;
 var nmb;
@@ -270,6 +267,10 @@ var nmb;
     //     username = 'Anto';
      
   blast = universe.add.sprite(0,0,'blast');
+  // pmenu = universe.add.sprite(universe.world.width/2,universe.world.height/2,'pausemenu');
+  // pmenu.anchor.setTo(0.5,0.5);
+  // pmenu.kill();
+
     blast.visible=false;
     blast.animations.add('expl',[0,1,2,3,4,5,6,7,8],10,false);
     blast.scale.setTo(2,2)
@@ -951,11 +952,13 @@ function goFull() {
 }
 
 function pause_game() {
-    universe.paused= true;
+
+    universe.paused = true;
+    
+    pmenu = universe.add.sprite(universe.world.width/2,universe.world.height/2,'pausemenu');
+    pmenu.anchor.setTo(0.5,0.5);
+
     universe.input.onDown.add(intermediate, self);
-    
-    thepausemenu= universe.add.sprite(80, 30, 'pausemenu');
-    
     
     console.log("Inside pause game")
 }
@@ -969,20 +972,20 @@ function intermediate(event)
         console.log(x);
         console.log(y);
 
-        if((x>=494 && x<=750) && (y>=294 && y<=351))
+        if((x>=556 && x<=805) && (y>=238 && y<=286))
         {
             console.log("in resume");
             unpause(x, y);
         }
 
-        else if((x>=494 && x<=750) && (y>=370 && y<=415))
+        else if((x>=557 && x<=800) && (y>=311 && y<=360))
         {
             console.log("in restart");
             
             start_state(1);
         }
 
-        else if((x>=494 && x<=750) && (y>=444 && y<=497))
+        else if((x>=558 && x<=808) && (y>=386 && y<=435))
         {
             console.log("in main menu");
             
@@ -999,14 +1002,14 @@ function start_state(z){
     if(z==1)
         {
             console.log("z="+z);
-            thepausemenu.kill();
+            pmenu.kill();
             universe.paused= false;
             universe.state.start("gameState2",true,false);        }
 
     if(z==2)
     {
         console.log("z="+z);
-        thepausemenu.kill();
+        pmenu.kill();
         universe.paused= false;
         universe.state.start("gameState1",true,false);
     }
@@ -1014,7 +1017,7 @@ function start_state(z){
 
 function unpause(x, y) {
     console.log("Inside unpause");
-    thepausemenu.kill();
+    pmenu.kill();
     universe.paused= false;
 }
 
