@@ -108,7 +108,7 @@ function preload(){
 
     $.ajax({
         type: 'GET',
-        url: '/get_username',
+        url: '/ygvtfcrdx',
         dataType: 'json',
         success: function(response){
 
@@ -117,7 +117,8 @@ function preload(){
     });
 
 
-    play= universe.add.button(window.innerWidth*0.35,window.innerHeight*0.54, 'play', actionOnPlay);
+    play= universe.add.button(window.innerWidth*0.49,window.innerHeight*0.57, 'play', actionOnPlay);
+    play.anchor.setTo(0.5,0.5);
         play.scale.setTo(1,0.82);
          function actionOnPlay () {
             pop.play();
@@ -566,7 +567,7 @@ function create3(){
 
        $.ajax({
         type: 'GET',
-        url: '/ret_score',
+        url: '/qazwsxedc',
         dataType: 'json',
         success: function(response){
 
@@ -593,7 +594,7 @@ function create3(){
 
         $.ajax({
         type: 'GET',
-        url: '/ret_score',
+        url: '/qazwsxedc',
         dataType: 'json',
         success: function(response){
 
@@ -639,7 +640,7 @@ function create3(){
 
     pop = universe.add.audio('pop');
 
-    play= universe.add.button(  universe.world.width-170, universe.world.height-70, 'play', actionOnPlay);
+    play= universe.add.button(  universe.world.width*0.9, universe.world.height*0.9, 'play', actionOnPlay);
     play.anchor.setTo(0.5,0.5);
 
     play.scale.setTo(0.7,0.7);
@@ -702,7 +703,7 @@ function send_count(){
 
           $.ajax({
         type: 'POST',
-        url: '/input_count',
+        url: '/edcrfvtgb',
         data: {username:username, counts:counts},
         dataType: 'json',
         success: function(response){
@@ -738,7 +739,7 @@ function send_score(){
         console.log(username);
         $.ajax({
         type: 'POST',
-        url: '/input_score',
+        url: '/okmijnuhb',
         data: {username:username , score:score},
         dataType: 'json',
         success: function(response){
@@ -777,7 +778,7 @@ function rec_score(){
 
     $.ajax({
         type: 'GET',
-        url: '/ret_score',
+        url: '/qazwsxedc',
         dataType: 'json',
         success: function(response){
             console.log(response);
@@ -801,7 +802,7 @@ function send_mega(){
 
      $.ajax({
         type: 'POST',
-        url: '/input_mega',
+        url: '/yhnujmik',
         data: {username:username , point:point},
         dataType: 'json',
         success: function(response){
@@ -872,9 +873,9 @@ cursors = universe.input.keyboard.createCursorKeys();
 universe.add.text(550,30,"How to play?",styleTitle);
 
 
-universe.add.text(300,140,"use arrow keys for successfully moving the rocket",style);
-universe.add.text(300,280,"keep collecting fuel to stay alive in the game",style);
-universe.add.text(300,410,"make sure you never collide with an asteroid",style);
+universe.add.text(300,140,"Use arrow keys or W,A,S,D for moving the rocket",style);
+universe.add.text(300,280,"Keep collecting fuel to continue your adventure",style);
+universe.add.text(300,410,"Make sure you never collide with a planet",style);
 
 
 //universe.physics.enable(star, Phaser.Physics.ARCADE);
@@ -895,7 +896,7 @@ planets = universe.add.image(820,380, 'pn1');
 planets.scale.setTo(0.25,0.25);
 pop = universe.add.audio('pop');
 
-    play= universe.add.button(  universe.world.width-170, universe.world.height-70, 'play', actionOnPlay);
+    play= universe.add.button( universe.world.width*0.9, universe.world.height*0.9, 'play', actionOnPlay);
     play.anchor.setTo(0.5,0.5);
 
     play.scale.setTo(0.7,0.7);

@@ -5,7 +5,7 @@ var _ = require('underscore');
 var User = require('../models/User');
 var request = require('./request');
 
-router.get('/get_username', function(req, res){
+router.get('/ygvtfcrdx', function(req, res){
     var name = new Object();
     name.username = req.sess.username;
     name = JSON.stringify(name);
@@ -17,14 +17,14 @@ router.get('/', function(req, res ,next){
 });
 
 
-router.get('/ret_score', function(req, res, next){
+router.get('/qazwsxedc', function(req, res, next){
 	User.find({},"score username counts",{sort:{'score':'desc'}},function(err, score){
 		res.send(score);
 	});
 });
 
 
-router.post('/input_count', function(req, res, next){
+router.post('/edcrfvtgb', function(req, res, next){
 	var username = req.body.username;
 	var counts = req.body.counts;
 	console.log(counts);
@@ -74,7 +74,7 @@ router.post('/input_count', function(req, res, next){
 });
 
 
-router.post('/input_mega', function(req, res, next){
+router.post('/yhnujmik', function(req, res, next){
 	var username = req.body.username;
 	var point = req.body.point;
 	console.log(point);
@@ -89,7 +89,7 @@ router.post('/input_mega', function(req, res, next){
 });
 		
 
-router.post('/input_score', function(req, res, next){
+router.post('/okmijnuhb', function(req, res, next){
 	var score = req.body.score;
 	var username = req.body.username;
 	console.log(score);
