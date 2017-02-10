@@ -55,6 +55,7 @@ howtoplay.prototype = {
  var fullButton;
  var fullButton_scale = 0.3;
  var button;
+ var play;
  
 
 universe.state.add('gameState1',gameState1);
@@ -72,11 +73,13 @@ function preload(){
          universe.load.audio('music','audio/lp.mp3');
          universe.load.image('ship','images/ship.png');
          universe.load.image('lp','images/lp.png');
+            universe.load.image('play','images/play.png');
+
     
 
 }
  function create(){
-           
+           universe.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;  
     
      landing = universe.add.tileSprite(0, 0,1350,753, 'lp');
      lp_width = window.innerWidth/1350;
@@ -99,9 +102,25 @@ function preload(){
 
      pop = universe.add.audio('pop');   
        
-//fullscreen
-    universe.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    universe.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+
+play= universe.add.button(window.innerWidth*0.35,window.innerHeight*0.54, 'play', actionOnPlay);
+        play.scale.setTo(0.95,0.8);
+
+         function actionOnPlay () {
+            pop.play();
+            if (universe.scale.isFullScreen){
+        console.log("gofull");
+        universe.scale.stopFullScreen();
+    }
+    else{
+        universe.scale.startFullScreen(false);
+    }
+        universe.state.start('gameState2');
+               
+}
+
+
 
 
 }
@@ -168,14 +187,7 @@ function preload(){
  x = universe.input.mousePointer.x;
     y = universe.input.mousePointer.y;
 
-if (universe.input.activePointer.isDown) 
-    {
-        if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.53 &&y<window.innerHeight*0.616) 
-        {
-            universe.state.start('gameState2'); //play button
-        }
-
-        else if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.65 &&y<window.innerHeight*0.724) 
+if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.65 &&y<window.innerHeight*0.724) 
         {
             universe.state.start('howtoplay');
         }
@@ -187,8 +199,6 @@ if (universe.input.activePointer.isDown)
     }
 
 
-
-}
 
 var pl = [];
 var st = [];
