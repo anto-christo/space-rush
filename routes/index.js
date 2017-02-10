@@ -5,7 +5,7 @@ var _ = require('underscore');
 var User = require('../models/User');
 var request = require('./request');
 
-router.get('/', function(req, res){
+router.get('/get_username', function(req, res){
     var name = new Object();
     name.username = req.sess.username;
     name = JSON.stringify(name);
