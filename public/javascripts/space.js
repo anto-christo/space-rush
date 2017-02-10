@@ -73,6 +73,7 @@ function preload(){
          universe.load.audio('music','audio/lp.mp3');
          universe.load.image('ship','images/ship.png');
          universe.load.image('lp','images/lp.png');
+         universe.load.image('play','images/play.png');
     
 
 }
@@ -114,6 +115,18 @@ function preload(){
             username=response.username;
        }
     });
+
+
+    play= universe.add.button(window.innerWidth*0.35,window.innerHeight*0.54, 'play', actionOnPlay);
+        play.scale.setTo(1,0.82);
+         function actionOnPlay () {
+            pop.play();
+            
+            playFull();
+            flag_sw=0;
+        universe.state.start('gameState2');
+               
+  }
 
 
 }
@@ -184,6 +197,7 @@ if (universe.input.activePointer.isDown)
     {
         if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.53 &&y<window.innerHeight*0.616) 
         {
+            flag_sw=0;
             universe.state.start('gameState2'); //play button
         }
 
@@ -219,6 +233,8 @@ var pmenu;
 var uname;
 var scr;
 var nmb;
+var w,a,ss,d;
+var flag_sw=0;
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
  function preload2(){
@@ -299,6 +315,13 @@ var nmb;
     hit = universe.add.audio('hit');
     take = universe.add.audio('take');
     alert = universe.add.audio('alert');
+
+    w= universe.input.keyboard.addKey(Phaser.Keyboard.W);
+    a= universe.input.keyboard.addKey(Phaser.Keyboard.A);
+    ss= universe.input.keyboard.addKey(Phaser.Keyboard.S);
+    d= universe.input.keyboard.addKey(Phaser.Keyboard.D);
+  
+  cursors= universe.input.keyboard.createCursorKeys();
      
 //-------------------------------------------------------------------------------------------------------------------
 
@@ -426,71 +449,89 @@ function update2(){
         q=j;
     }
 
-    if(cursors.left.isDown){
-        rocket.body.velocity.x = -430; 
-        rocket.angle = 180;  
-        background.tilePosition.x -= 2;              
-    }
+    if(flag_sw==0){
 
-    else if(cursors.right.isDown){
-        rocket.body.velocity.x = 380;
-        rocket.angle = 0;
-        background.tilePosition.x -= 2;                 
-    }
+        if(cursors.left.isDown || a.isDown){
+            rocket.body.velocity.x = -430; 
+            rocket.angle = 180;  
+            background.tilePosition.x -= 2;              
+        }
 
-    else if(cursors.up.isDown){
-        rocket.body.velocity.y = -380;
-        rocket.body.velocity.x = 0;
-        rocket.angle = 270; 
-        background.tilePosition.x -= 2;                 
-    }
+        else if(cursors.right.isDown || d.isDown){
+            rocket.body.velocity.x = 380;
+            rocket.angle = 0;
+            background.tilePosition.x -= 2;                 
+        }
 
-    else if(cursors.down.isDown){
-        rocket.body.velocity.y = 380;
-        rocket.body.velocity.x = 0;
-        rocket.angle = 90;
-        background.tilePosition.x -= 2;                  
-    }
+        else if(cursors.up.isDown || w.isDown){
+            rocket.body.velocity.y = -380;
+            rocket.body.velocity.x = 0;
+            rocket.angle = 270; 
+            background.tilePosition.x -= 2;                 
+        }
 
-    else{
-        rocket.body.velocity.x = 0;
-        rocket.body.velocity.y = 0;
-        background.tilePosition.x -= 2;
-    }
+        else if(cursors.down.isDown || ss.isDown){
+            rocket.body.velocity.y = 380;
+            rocket.body.velocity.x = 0;
+            rocket.angle = 90;
+            background.tilePosition.x -= 2;                  
+        }
 
-    if(cursors.left.isDown && cursors.up.isDown){
-        rocket.body.velocity.x = -430;
-        rocket.body.velocity.y = -430;
-        rocket.angle = 225;   
-        //background.tilePosition.x -= 2;               
-    }
+        else{
+            rocket.body.velocity.x = 0;
+            rocket.body.velocity.y = 0;
+            background.tilePosition.x -= 2;
+        }
 
-    if(cursors.left.isDown && cursors.down.isDown){
-        rocket.body.velocity.x = -430;
-        rocket.body.velocity.y = 430;
-        rocket.angle = 135; 
-        //background.tilePosition.x -= 2;                 
-    }
+        if((cursors.left.isDown && cursors.up.isDown) || (a.isDown && w.isDown)){
+            rocket.body.velocity.x = -430;
+            rocket.body.velocity.y = -430;
+            rocket.angle = 225;   
+            //background.tilePosition.x -= 2;               
+        }
 
-    if(cursors.right.isDown && cursors.up.isDown){
-        rocket.body.velocity.x = 380;
-        rocket.body.velocity.y = -380;
-        rocket.angle = 315; 
-       // background.tilePosition.x -= 2;                 
-    }
+        if((cursors.left.isDown && cursors.down.isDown) || (a.isDown && ss.isDown)){
+            rocket.body.velocity.x = -430;
+            rocket.body.velocity.y = 430;
+            rocket.angle = 135; 
+            //background.tilePosition.x -= 2;                 
+        }
 
-    if(cursors.right.isDown && cursors.down.isDown){
-        rocket.body.velocity.x = 380;
-        rocket.body.velocity.y = 380;
-        rocket.angle = 45;
-       // background.tilePosition.x -= 2;
-    }
+        if((cursors.right.isDown && cursors.up.isDown) || (d.isDown && w.isDown)){
+            rocket.body.velocity.x = 380;
+            rocket.body.velocity.y = -380;
+            rocket.angle = 315; 
+           // background.tilePosition.x -= 2;                 
+        }
 
-    if(  healthBar.width<0){
+        if((cursors.right.isDown && cursors.down.isDown) || (d.isDown && ss.isDown)){
+            rocket.body.velocity.x = 380;
+            rocket.body.velocity.y = 380;
+            rocket.angle = 45;
+           // background.tilePosition.x -= 2;
+        }
+
+  } 
+
+
+     if(  healthBar.width<0){
         alert.stop();
-        fl = 1;
+    
+      rocket.body.allowGravity= true;
+      rocket.body.velocity.y= 0;
+      rocket.body.gravity.y+= 7000000;
+    
+      if(rocket.angle< 90);
+      rocket.angle+= 3;
+      console.log("rocket gravity= "+rocket.body.gravity.y);
+    
+      fl = 1;
+
+      flag_sw=1;
+      
+      if(rocket.body.position.y >= universe.world.height*0.89)
         universe.state.start('gameOver');
-    }
+      }
   
    universe.physics.arcade.overlap(rocket, planets, impact, null, this);
 }
@@ -606,6 +647,8 @@ function create3(){
          
     function actionOnPlay () {
             pop.play();
+             playFull();
+             flag_sw=0;
         universe.state.start('gameState2');
                
     }
@@ -860,6 +903,8 @@ pop = universe.add.audio('pop');
          
     function actionOnPlay () {
             pop.play();
+             playFull();
+             flag_sw=0;
         universe.state.start('gameState2');
                
     }
@@ -975,6 +1020,8 @@ function lcreate(){
          
     function actionOnPlay () {
             pop.play();
+             playFull();
+             flag_sw=0;
         universe.state.start('gameState2');
                
     }
@@ -1025,6 +1072,10 @@ function fuel(){
         {
             alert.play();
             flag=1;
+
+            healthBar.alpha = 0;
+
+            universe.add.tween(healthBar).to( { alpha: 1 }, 100, Phaser.Easing.Linear.None, true, 0, 1000, true);
         }
 
     if(healthBar.width>=400 && flag==1)
@@ -1055,6 +1106,11 @@ function goFull() {
         universe.scale.startFullScreen(false);
     }
 }
+
+function playFull(){
+  universe.scale.startFullScreen(false);
+}
+
 
 function pause_game() {
 
@@ -1109,6 +1165,7 @@ function start_state(z){
             console.log("z="+z);
             pmenu.kill();
             universe.paused= false;
+            flag_sw=0;
             universe.state.start("gameState2",true,false);        }
 
     if(z==2)
@@ -1135,7 +1192,7 @@ function over(){
 
 
 function inc_score(){
-    score += 100;
+    score += 10;
     scoreText.text = 'SCORE: ' + score;
 }
 
@@ -1152,6 +1209,7 @@ var calcSin = function calcSin (amp, osc, sinD) {
         var sin = calcSin(100, oscIndex, 20);
         star.x = 900 + parseInt(sin);
         planets.x = 900 + parseInt(sin);
+        rocket.x = 900 + parseInt(sin);
         y = y - 3;
         oscIndex++;
         // console.log(rocket.x);
