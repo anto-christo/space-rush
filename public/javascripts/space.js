@@ -55,6 +55,7 @@ howtoplay.prototype = {
  var fullButton;
  var fullButton_scale = 0.3;
  var button;
+ var username;
  
 
 universe.state.add('gameState1',gameState1);
@@ -102,6 +103,17 @@ function preload(){
 //fullscreen
     universe.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     universe.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+
+    $.ajax({
+        type: 'GET',
+        url: '/get_username',
+        dataType: 'json',
+        success: function(response){
+
+            username=response.username;
+       }
+    });
 
 
 }
@@ -203,7 +215,6 @@ var scoreText;
 var hit,take,alert;
 var bmd; 
 var fl = 0;
-var username='Anto';
 var pmenu;
 var uname;
 var scr;
@@ -392,6 +403,8 @@ var nmb;
 
     pauseButton= universe.add.button(1300, 40, 'pause', pause_game, this, 2, 1, 0);
     pauseButton.scale.setTo(0.1, 0.1);
+
+
 
 
 }
@@ -620,26 +633,26 @@ function send_count(){
         counts++;
         console.log("counts++"+counts);
 
-        if(score<100)
+        if(score<75)
           point = 0;
 
 
-        if(score>=100 && score<149)
+        if(score>=75 && score<125)
           point = 50;
 
-        else if(score>=150 && score<299)
+        else if(score>=125 && score<200)
           point = 75;
 
-        else if(score>=300 && score<499)
+        else if(score>=200 && score<350)
           point = 150;
 
-        else if(score>=500 && score<699)
+        else if(score>=350 && score<600)
           point = 250;
 
-        else if(score>=700 && score<999)
+        else if(score>=600 && score<850)
           point = 350;
 
-        else if(score>=1000)
+        else if(score>=850)
         {
 
           console.log("send counts:"+counts);

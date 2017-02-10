@@ -5,15 +5,12 @@ var _ = require('underscore');
 var User = require('../models/User');
 var request = require('./request');
 
-// router.get('/', function(req, res, next){
-// 	if(req.sess && req.sess.username)
-// 	res.render('index');
-
-//     else
-//     {
-//     	res.redirect('www.facebook.com');
-//     }
-// });
+router.get('/get_username', function(req, res){
+    var name = new Object();
+    name.username = req.sess.username();
+    name = JSON.stringify(name);
+    res.send(name);
+});
 
 router.get('/', function(req, res ,next){
 	res.render('index');
