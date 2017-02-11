@@ -1183,6 +1183,7 @@ function intermediate(event)
 function unpause(x, y) {
     // console.log("Inside unpause");
     //pmenu.kill();
+    pus.kill();
     universe.paused= false;
 }
 
