@@ -122,7 +122,7 @@ function preload(){
         play.scale.setTo(1,0.82);
          function actionOnPlay () {
             pop.play();
-            playFull();
+           universe.scale.startFullScreen(false);
             flag_sw=0;
         universe.state.start('gameState2');
                
