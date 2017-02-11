@@ -419,14 +419,14 @@ var flag_sw=0;
 
  //fullscreen
 
-        fullButton = universe.add.button(universe.world.width*0.9, universe.world.height*0.05, 'fullButton', goFull, this, 2, 1, 0);
+        fullButton = universe.add.button(universe.world.width-150, universe.world.height-625, 'fullButton', goFull, this, 2, 1, 0);
         fullButton.input.priorityID = 0;
         fullButton.scale.setTo(0.015,0.015);
     
   //pause button
 
-    pauseButton= universe.add.button(universe.world.width*0.95, universe.world.height*0.05, 'pause', pause_game, this, 2, 1, 0);
-    pauseButton.scale.setTo(0.15, 0.15);
+    pauseButton= universe.add.button(1300, 40, 'pause', pause_game, this, 2, 1, 0);
+    pauseButton.scale.setTo(0.1, 0.1);
 
 
 
