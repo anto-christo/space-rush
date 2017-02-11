@@ -517,19 +517,19 @@ function update2(){
      if(  healthBar.width<0){
         alert.stop();
     
-      rocket.body.allowGravity= true;
-      rocket.body.velocity.y= 0;
-      rocket.body.gravity.y+= 7000000;
+      // rocket.body.allowGravity= true;
+      // rocket.body.velocity.y= 0;
+      // rocket.body.gravity.y+= 7000000;
     
-      if(rocket.angle< 90);
-      rocket.angle+= 3;
-      // console.log("rocket gravity= "+rocket.body.gravity.y);
+      // if(rocket.angle< 90);
+      // rocket.angle+= 3;
+      // // console.log("rocket gravity= "+rocket.body.gravity.y);
     
-      fl = 1;
+       fl = 1;
 
-      flag_sw=1;
+       flag_sw=1;
       
-      if(rocket.body.position.y >= universe.world.height*0.85)
+      // if(rocket.body.position.y >= universe.world.height*0.85)
         universe.state.start('gameOver');
       }
   
