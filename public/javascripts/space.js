@@ -78,7 +78,7 @@ function preload(){
 
 }
  function create(){
-           
+     universe.scale.stopFullScreen();  
     
      landing = universe.add.tileSprite(0, 0,1350,753, 'lp');
      lp_width = window.innerWidth/1350;
@@ -122,7 +122,6 @@ function preload(){
         play.scale.setTo(1,0.82);
          function actionOnPlay () {
             pop.play();
-            
             playFull();
             flag_sw=0;
         universe.state.start('gameState2');
@@ -230,7 +229,7 @@ var scoreText;
 var hit,take,alert;
 var bmd; 
 var fl = 0;
-var pmenu;
+// var pmenu;
 var uname;
 var scr;
 var nmb;
@@ -262,7 +261,7 @@ var flag_sw=0;
      universe.load.image('ship','images/ship.png');
    universe.load.image('pause','images/pause.png');
    universe.load.image('play','images/play.png');
-     universe.load.image('pausemenu','images/pausemenu.png');
+     //universe.load.image('pausemenu','images/pausemenu.png');
      universe.load.spritesheet('blast', 'images/flame.png',64,64);
      universe.load.image('fullButton','images/fullButton.png');
 
@@ -333,9 +332,9 @@ var flag_sw=0;
      k= 0;
 
      for(var i=0;i<300;i++){
-            console.log("in create2");
+            // console.log("in create2");
             randX = 1200+Math.floor(Math.random()*100);
-            randY = 50+Math.floor(Math.random()*500);
+            randY = universe.world.height*0.075+Math.floor(Math.random()*universe.world.height*0.755);
             st[i] = star.create(randX + k, randY, 'star');
             st[i].scale.setTo(0.4, 0.4);
             st[i].taken=0;
@@ -376,7 +375,7 @@ var flag_sw=0;
         var r;
         r = Math.random()*h+l; 
         var s;
-        s = Math.random()*1+0.2;
+        s = Math.random()*0.6+0.2;
 
         var temp = Math.round(Math.random()*1);
 
@@ -524,13 +523,13 @@ function update2(){
     
       if(rocket.angle< 90);
       rocket.angle+= 3;
-      console.log("rocket gravity= "+rocket.body.gravity.y);
+      // console.log("rocket gravity= "+rocket.body.gravity.y);
     
       fl = 1;
 
       flag_sw=1;
       
-      if(rocket.body.position.y >= universe.world.height*0.89)
+      if(rocket.body.position.y >= universe.world.height*0.85)
         universe.state.start('gameOver');
       }
   
@@ -578,7 +577,7 @@ function create3(){
                 {
                     exist=1;
                     counts=response[j].counts;
-                    console.log("response counts:"+counts);
+                    // console.log("response counts:"+counts);
                     
                     send_count();
 
@@ -609,7 +608,7 @@ function create3(){
 
                         if(score>response[j].score)
                             {
-                                console.log("High score sent!!");
+                                // console.log("High score sent!!");
                                 send_score();
                                 setTimeout(rec_score,500);
                                 break;
@@ -617,7 +616,7 @@ function create3(){
   
                         else
                             {
-                                console.log("Score not sent!!");
+                                // console.log("Score not sent!!");
                                 setTimeout(rec_score,500);
                                 break;
                             }
@@ -663,7 +662,7 @@ function create3(){
                
         }
             
-    console.log("Mega Point:"+point);
+    // console.log("Mega Point:"+point);
 }
 
 function update3(){
@@ -675,7 +674,7 @@ function send_count(){
           counts=0;
 
         counts++;
-        console.log("counts++"+counts);
+        // console.log("counts++"+counts);
 
         if(score<75)
           point = 0;
@@ -699,7 +698,7 @@ function send_count(){
         else if(score>=850)
         {
 
-          console.log("send counts:"+counts);
+          // console.log("send counts:"+counts);
 
           $.ajax({
         type: 'POST',
@@ -708,7 +707,7 @@ function send_count(){
         dataType: 'json',
         success: function(response){
             if(response.msg === "success"){
-                console.log('count sent from space.js');
+                // console.log('count sent from space.js');
             }
             else{
                 $('#error-msg').html('');
@@ -735,8 +734,8 @@ function send_count(){
 
 
 function send_score(){
-    console.log(score);
-        console.log(username);
+    // console.log(score);
+    //     console.log(username);
         $.ajax({
         type: 'POST',
         url: '/okmijnuhb',
@@ -744,7 +743,7 @@ function send_score(){
         dataType: 'json',
         success: function(response){
             if(response.msg === "success"){
-                console.log('score sent from space.js');
+                // console.log('score sent from space.js');
             }
             else{
                 $('#error-msg').html('');
@@ -781,7 +780,7 @@ function rec_score(){
         url: '/qazwsxedc',
         dataType: 'json',
         success: function(response){
-            console.log(response);
+            // console.log(response);
             var j=0;
             while(response[j]!==null && j<10)
             {
@@ -807,7 +806,7 @@ function send_mega(){
         dataType: 'json',
         success: function(response){
             if(response.msg === "success"){
-                console.log('point sent from space.js');
+                // console.log('point sent from space.js');
             }
             else{
                 $('#error-msg').html('');
@@ -1116,13 +1115,15 @@ function playFull(){
 function pause_game() {
 
     universe.paused = true;
+    pus = universe.add.text(universe.world.width/2,universe.world.height/2,"Click Anywhere To Resume",{fontSize: '25px', fill:'white'});
+    pus.anchor.setTo(0.5, 0,5);
     
-    pmenu = universe.add.sprite(universe.world.width/2,universe.world.height/2,'pausemenu');
-    pmenu.anchor.setTo(0.5,0.5);
+    //pmenu = universe.add.sprite(universe.world.width/2,universe.world.height/2,'pausemenu');
+    //pmenu.anchor.setTo(0.5,0.5);
 
     universe.input.onDown.add(intermediate, self);
     
-    console.log("Inside pause game")
+    // console.log("Inside pause game")
 }
 
 function intermediate(event)
@@ -1131,9 +1132,11 @@ function intermediate(event)
     {   
         x = universe.input.mousePointer.x;
         y = universe.input.mousePointer.y;
-        console.log(x);
-        console.log(y);
+        // console.log(x);
+        // console.log(y);
+        unpause(x, y);
 
+/*
         if((x>=556 && x<=805) && (y>=238 && y<=286))
         {
             console.log("in resume");
@@ -1155,32 +1158,31 @@ function intermediate(event)
         }
 
     }   
-
-    else
-        console.log("Out of Range");
-}
-
-function start_state(z){
-    if(z==1)
-        {
-            console.log("z="+z);
-            pmenu.kill();
-            universe.paused= false;
-            flag_sw=0;
-            universe.state.start("gameState2",true,false);        }
-
-    if(z==2)
-    {
-        console.log("z="+z);
-        pmenu.kill();
-        universe.paused= false;
-        universe.state.start("gameState1",true,false);
+*/
     }
 }
 
+// function start_state(z){
+//     if(z==1)
+//         {
+//             // console.log("z="+z);
+//             //pmenu.kill();
+//             universe.paused= false;
+//             flag_sw=0;
+//             universe.state.start("gameState2",true,false);        }
+
+//     if(z==2)
+//     {
+//         // console.log("z="+z);
+//         //pmenu.kill();
+//         universe.paused= false;
+//         universe.state.start("gameState1",true,false);
+//     }
+// }
+
 function unpause(x, y) {
-    console.log("Inside unpause");
-    pmenu.kill();
+    // console.log("Inside unpause");
+    //pmenu.kill();
     universe.paused= false;
 }
 
