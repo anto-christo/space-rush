@@ -67,13 +67,15 @@ universe.state.start('gameState1');
 
 
 function preload(){
-         universe.load.image('button','images/button-start-game.png')
-         universe.load.spritesheet('fullButton','images/fullButton.png', 125, 100);
-         universe.load.audio('pop','audio/pop.wav');
-         universe.load.audio('music','audio/lp.mp3');
-         universe.load.image('ship','images/ship.png');
-         universe.load.image('lp','images/lp.png');
-         universe.load.image('play','images/play.png');
+         universe.load.image('button','../public/images/button-start-game.png')
+         universe.load.spritesheet('fullButton','../public/images/fullButton.png', 125, 100);
+         universe.load.audio('pop','../public/audio/pop.wav');
+         universe.load.audio('music','../public/audio/lp.mp3');
+         universe.load.image('ship','../public/images/ship.png');
+         universe.load.image('lp','../public/images/lp.png');
+         universe.load.image('play','../public/images/play.png');
+         universe.load.image('how','../public/images/how.png');
+         universe.load.image('lead','../public/images/lead.png');
     
 
 }
@@ -119,6 +121,11 @@ function preload(){
 
     play= universe.add.button(window.innerWidth*0.49,window.innerHeight*0.57, 'play', actionOnPlay);
     play.anchor.setTo(0.5,0.5);
+    how= universe.add.button(window.innerWidth*0.49,window.innerHeight*0.70, 'how', onHow);
+    how.anchor.setTo(0.5,0.5);
+    lead= universe.add.button(window.innerWidth*0.49,window.innerHeight*0.81, 'lead', onLead);
+    lead.anchor.setTo(0.5,0.5);
+
         play.scale.setTo(1,0.82);
          function actionOnPlay () {
             pop.play();
@@ -126,6 +133,14 @@ function preload(){
             flag_sw=0;
         universe.state.start('gameState2');
                
+  }
+
+  function onHow(){
+    universe.state.start('howtoplay');
+  }
+
+  function onLead(){
+    universe.state.start('leaderboard');
   }
 
 
@@ -193,24 +208,24 @@ function preload(){
  x = universe.input.mousePointer.x;
     y = universe.input.mousePointer.y;
 
-if (universe.input.activePointer.isDown) 
-    {
-        if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.53 &&y<window.innerHeight*0.616) 
-        {
-            flag_sw=0;
-            universe.state.start('gameState2'); //play button
-        }
+// if (universe.input.activePointer.isDown) 
+//     {
+//         if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.53 &&y<window.innerHeight*0.616) 
+//         {
+//             flag_sw=0;
+//             universe.state.start('gameState2'); //play button
+//         }
 
-        else if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.65 &&y<window.innerHeight*0.724) 
-        {
-            universe.state.start('howtoplay');
-        }
+//         else if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.65 &&y<window.innerHeight*0.724) 
+//         {
+//             universe.state.start('howtoplay');
+//         }
         
-        else if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.72 &&y<window.innerHeight*0.832) 
-        {
-            universe.state.start('leaderboard');
-        }
-    }
+//         else if (x>window.innerWidth*0.35 &&x<window.innerWidth*0.63 && y>window.innerHeight*0.72 &&y<window.innerHeight*0.832) 
+//         {
+//             universe.state.start('leaderboard');
+//         }
+//     }
 
 
 
@@ -238,36 +253,36 @@ var flag_sw=0;
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
  function preload2(){
-     universe.load.image('pn1','images/planet1a.png');
+     universe.load.image('pn1','../public/images/planet1a.png');
      // universe.load.image('pn2','images/planet2.png');
      // universe.load.image('pn3','images/planet3.png');
-     universe.load.image('pn4','images/planet4.png');
+     universe.load.image('pn4','../public/images/planet4.png');
      // universe.load.image('pn5','images/planet5.png');
-     universe.load.image('pn6','images/planet6.png');
+     universe.load.image('pn6','../public/images/planet6.png');
      // universe.load.image('pn7','images/planet7.png');
      // universe.load.image('pn8','images/planet10.png');
      //universe.load.image('pn9','images/planet11.png');
      // universe.load.image('pn10','images/planet12.png');
-     universe.load.image('pn11','images/planet13.png');
-    universe.load.image('pn12','images/planet14.png');
+     universe.load.image('pn11','../public/images/planet13.png');
+    universe.load.image('pn12','../public/images/planet14.png');
      // universe.load.image('pn13','images/planet15.png');
-     universe.load.image('pn14','images/planet16.png');
+     universe.load.image('pn14','../public/images/planet16.png');
       //universe.load.image('pn15','images/planet17.png');
      // universe.load.image('pn16','images/planet18.png');
-     universe.load.image('pn17','images/planet19.png');
+     universe.load.image('pn17','../public/images/planet19.png');
      //universe.load.image('pn18','images/planet20.png');
-     universe.load.image('star','images/fuel.png');
-     universe.load.image('bg','images/space_bg.png');
-     universe.load.image('ship','images/ship.png');
-   universe.load.image('pause','images/pause.png');
-   universe.load.image('play','images/play.png');
+     universe.load.image('star','../public/images/fuel.png');
+     universe.load.image('bg','../public/images/space_bg.png');
+     universe.load.image('ship','../public/images/ship.png');
+   universe.load.image('pause','../public/images/pause.png');
+   universe.load.image('play','../public/images/play.png');
      //universe.load.image('pausemenu','images/pausemenu.png');
-     universe.load.spritesheet('blast', 'images/flame.png',64,64);
-     universe.load.image('fullButton','images/fullButton.png');
+     universe.load.spritesheet('blast', '../public/images/flame.png',64,64);
+     universe.load.image('fullButton','../public/images/fullButton.png');
 
-     universe.load.audio('hit','audio/hit.mp3');
-     universe.load.audio('take','audio/take.mp3');
-     universe.load.audio('alert','audio/alert.mp3');
+     universe.load.audio('hit','../public/audio/hit.mp3');
+     universe.load.audio('take','../public/audio/take.mp3');
+     universe.load.audio('alert','../public/audio/alert.mp3');
 }
 
 
@@ -539,11 +554,11 @@ function update2(){
 
 function preload3(){
 
-    universe.load.audio('pop','audio/pop.wav');
-    universe.load.image('home','images/home.png');
-    universe.load.image('play','images/play.png');
-    universe.load.image('table','images/table.png');
-    universe.load.image('bg','images/space_bg.png');
+    universe.load.audio('pop','../public/audio/pop.wav');
+    universe.load.image('home','../public/images/home.png');
+    universe.load.image('play','../public/images/play.png');
+    universe.load.image('table','../public/images/table.png');
+    universe.load.image('bg','../public/images/space_bg.png');
 }
 
 var scoreText;
@@ -552,6 +567,7 @@ var exist=0;
 var counts;
 
 function create3(){
+    universe.scale.stopFullScreen();
     background = universe.add.tileSprite(0, 0, window.innerWidth*window.devicePixelRatio, window.innerHeight*window.devicePixelRatio, 'bg');
     alert.stop();
 
@@ -822,15 +838,15 @@ var arrows;
 var oscIndex = 0;
 
 function preload4(){
-         universe.load.image('bg','images/space_bg.png');
-         universe.load.image('arrow','images/arrows.png');
-         universe.load.image('ship','images/ship.png');
-         universe.load.image('star','images/fuel.png');
-         universe.load.image('pn1','images/planet1a.png');
-            universe.load.image('play','images/play.png'); 
-            universe.load.image('fullButton','images/fullButton.png');
-          universe.load.audio('pop','audio/pop.wav');
-          universe.load.image('home','images/home.png');
+         universe.load.image('bg','../public/images/space_bg.png');
+         universe.load.image('arrow','../public/images/arrows.png');
+         universe.load.image('ship','../public/images/ship.png');
+         universe.load.image('star','../public/images/fuel.png');
+         universe.load.image('pn1','../public/images/planet1a.png');
+            universe.load.image('play','../public/images/play.png'); 
+            universe.load.image('fullButton','../public/images/fullButton.png');
+          universe.load.audio('pop','../public/audio/pop.wav');
+          universe.load.image('home','../public/images/home.png');
     
 
 }
@@ -996,11 +1012,11 @@ function update4(){
 //---------------------------------------------------------------------------------------------------------------------------
 
 function lpreload(){
-      universe.load.audio('pop','audio/pop.wav');
-        universe.load.image('home','images/home.png');
-    universe.load.image('play','images/play.png');
-    universe.load.image('table','images/table.png');
-    universe.load.image('bg','images/space_bg.png');
+      universe.load.audio('pop','../public/audio/pop.wav');
+        universe.load.image('home','../public/images/home.png');
+    universe.load.image('play','../public/images/play.png');
+    universe.load.image('table','../public/images/table.png');
+    universe.load.image('bg','../public/images/space_bg.png');
 
 }
 
@@ -1082,6 +1098,9 @@ function fuel(){
         {
             alert.stop();
             flag=0;
+            healthBar.alpha = 1;
+            universe.add.tween(healthBar).to( { alpha: 1 }, 100, Phaser.Easing.Linear.None, true, 0, 1000, true);
+
         }  
 }
 
